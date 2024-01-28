@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gradal/screens/category_screen.dart';
 import 'package:gradal/screens/home_screen.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   int _selectedIndex = 0;
   final List<Widget> _tabs = [
     HomeScreen(),
-    Center(child: Text('Category page')),
+    CategoryScreen(),
     Center(child: Text('Stores page')),
     Center(child: Text('Cart page')),
     Center(child: Text('Profile page')),
