@@ -1,6 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gradal/categories/men_category_screen.dart';
 import 'package:gradal/widgets/fake_search.dart';
+
+List<ItemsData> items = [
+  ItemsData(label: 'men'),
+  ItemsData(label: 'women'),
+  ItemsData(label: 'shoes'),
+  ItemsData(label: 'bags'),
+  ItemsData(label: 'electronic'),
+  ItemsData(label: 'accessories'),
+  ItemsData(label: 'garden'),
+  ItemsData(label: 'kids'),
+  ItemsData(label: 'beauty'),
+];
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -10,6 +22,20 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
+  final PageController _pageController = PageController();
+
+  //! reset the page to index = 0
+  @override
+  void initState() {
+    for (var element in items) {
+      element.isSelected = false;
+    }
+    setState(() {
+      items[0].isSelected = true;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -29,10 +55,38 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   Widget sideNavigator(Size size) {
-    return Container(
+    return SizedBox(
       height: size.height * 0.8,
       width: size.width * 0.2,
-      color: Colors.grey.shade300,
+      //color: Colors.grey.shade300,
+      child: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              //! _pageController.jumpToPage(index);
+              _pageController.animateToPage(
+                index,
+                duration: const Duration(microseconds: 1000),
+                curve: Curves.bounceInOut,
+              );
+              // for (var element in items) {
+              //   element.isSelected = false;
+              // }
+              // setState(() {
+              //   items[index].isSelected = true;
+              // });
+            },
+            child: Container(
+              color: items[index].isSelected == true
+                  ? Colors.white
+                  : Colors.grey.shade300,
+              height: 100,
+              child: Center(child: Text(items[index].label)),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -41,6 +95,38 @@ class _CategoryScreenState extends State<CategoryScreen> {
       height: size.height * 0.8,
       width: size.width * 0.8,
       color: Colors.white,
+      child: PageView(
+        controller: _pageController,
+        onPageChanged: (value) {
+          for (var element in items) {
+            element.isSelected = false;
+          }
+          setState(() {
+            items[value].isSelected = true;
+          });
+        },
+        scrollDirection: Axis.vertical,
+        children: const [
+          MenCategroryScreen(),
+          Center(child: Text('women screen')),
+          Center(child: Text('shoes screen')),
+          Center(child: Text('bags screen')),
+          Center(child: Text('electronics screen')),
+          Center(child: Text('accessories screen')),
+          Center(child: Text('garden screen')),
+          Center(child: Text('kids screen')),
+          Center(child: Text('beauty screen')),
+        ],
+      ),
     );
   }
+}
+
+class ItemsData {
+  String label;
+  bool isSelected;
+  ItemsData({
+    required this.label,
+    this.isSelected = false,
+  });
 }

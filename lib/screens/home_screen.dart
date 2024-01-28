@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
               RepeatedTab(label: 'Bags'),
               RepeatedTab(label: 'Electronics'),
               RepeatedTab(label: 'Accessories'),
-              RepeatedTab(label: 'Home & Garden'),
+              RepeatedTab(label: 'Garden'),
               RepeatedTab(label: 'Kids'),
               RepeatedTab(label: 'Beauty'),
             ],
@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(child: Text('Bags screen')),
             Center(child: Text('Electronics screen')),
             Center(child: Text('Accessories screen')),
-            Center(child: Text('Home & Garden screen')),
+            Center(child: Text('Garden screen')),
             Center(child: Text('Kids screen')),
             Center(child: Text('Beauty screen')),
           ],
@@ -53,8 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
 
 class RepeatedTab extends StatelessWidget {
   const RepeatedTab({super.key, required this.label});
