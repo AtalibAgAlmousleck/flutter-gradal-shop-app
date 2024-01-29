@@ -13,6 +13,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: Colors.grey,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -64,7 +65,7 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
       bottomSheet: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(35),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -85,7 +86,7 @@ class _CartScreenState extends State<CartScreen> {
               ],
             ),
             Container(
-              height: 35,
+              height: 40,
               width: MediaQuery.of(context).size.width * 0.45,
               decoration: BoxDecoration(
                 color: Colors.yellow,
