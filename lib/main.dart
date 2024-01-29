@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gradal/main_screens/supplier_home.dart';
+import 'package:gradal/main_screens/welcome_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SupplierHomeScreen(),
+      home: WelcomeScreen(),
+      //SupplierHomeScreen(),
       //CustomerHomeScreen(),
     );
   }

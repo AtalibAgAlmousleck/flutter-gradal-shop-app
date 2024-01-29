@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gradal/main_screens/customer_home_screen.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
+import '../widgets/yellow_button.dart';
+
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
 
@@ -85,17 +87,10 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ],
             ),
-            Container(
-              height: 40,
-              width: MediaQuery.of(context).size.width * 0.45,
-              decoration: BoxDecoration(
-                color: Colors.yellow,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: MaterialButton(
-                onPressed: () {},
-                child: Text('Check Out'),
-              ),
+            YellowButton(
+              width: 0.45,
+              label: 'Check Out',
+              onPressed: () {},
             )
           ],
         ),
