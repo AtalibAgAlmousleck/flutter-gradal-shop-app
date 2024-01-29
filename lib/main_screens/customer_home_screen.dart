@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gradal/screens/category_screen.dart';
-import 'package:gradal/screens/home_screen.dart';
+import 'package:gradal/main_screens/cart.dart';
+import 'package:gradal/main_screens/category_screen.dart';
+import 'package:gradal/main_screens/home_screen.dart';
+import 'package:gradal/main_screens/profile.dart';
+import 'package:gradal/main_screens/stores.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({super.key});
@@ -14,9 +17,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   final List<Widget> _tabs = [
     HomeScreen(),
     CategoryScreen(),
-    Center(child: Text('Stores page')),
-    Center(child: Text('Cart page')),
-    Center(child: Text('Profile page')),
+    StoresScreen(),
+    CartScreen(),
+    ProfileScreen(),
   ];
   @override
   Widget build(BuildContext context) {
