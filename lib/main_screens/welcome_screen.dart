@@ -182,7 +182,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ],
               ),
-              //! third container
+              //! third container for customer only
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -205,16 +205,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             label: 'Login',
                             onPressed: () {
                               Navigator.pushReplacementNamed(
-                                  context,
-                                  '/customer_home',
-                                );
+                                context,
+                                '/customer_home',
+                              );
                             },
                             width: 0.25,
                           ),
                         ),
                         YellowButton(
                           label: 'Sign Up',
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, '/customer_signup');
+                          },
                           width: 0.25,
                         ),
                         // Image(
