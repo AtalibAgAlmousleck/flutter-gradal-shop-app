@@ -19,7 +19,7 @@ class SubCategoryProduct extends StatelessWidget {
         backgroundColor: Colors.white,
         leading: AppBarBackButton(),
         title: AppBarTitle(title: subcategoryName),
-        centerTitle: true,
+        //centerTitle: true,
       ),
       body: Center(
         child: Text(mencategoryName),

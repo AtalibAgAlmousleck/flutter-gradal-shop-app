@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:gradal/main_screens/supplier_home.dart';
 import 'package:gradal/widgets/yellow_button.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 

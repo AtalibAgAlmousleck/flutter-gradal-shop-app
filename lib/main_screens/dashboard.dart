@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gradal/dashboard_components/edit_business.dart';
+import 'package:gradal/dashboard_components/manage_product.dart';
+import 'package:gradal/dashboard_components/store.dart';
+import 'package:gradal/dashboard_components/supplier_balance.dart';
+import 'package:gradal/dashboard_components/supplier_order.dart';
+import 'package:gradal/dashboard_components/supplier_static.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
 List<String> labels = [
@@ -17,6 +23,15 @@ List<IconData> icons = [
   Icons.settings,
   Icons.attach_money,
   Icons.show_chart,
+];
+
+List<Widget> pages = [
+  MyStore(),
+  SupplierOrder(),
+  EditBusiness(),
+  ManageProduct(),
+  SupplierBalance(),
+  SupplierStatic()
 ];
 
 class DashboardScreen extends StatelessWidget {
@@ -51,28 +66,36 @@ class DashboardScreen extends StatelessWidget {
           children: List.generate(
             6,
             (index) {
-              return Card(
-                elevation: 25,
-                shadowColor: Colors.purpleAccent.shade200,
-                color: Colors.blueGrey.withOpacity(0.7),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Icon(
-                      icons[index],
-                      color: Colors.yellowAccent,
-                      size: 50,
-                    ),
-                    Text(
-                      labels[index].toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w600,
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => pages[index]),
+                  );
+                },
+                child: Card(
+                  elevation: 25,
+                  shadowColor: Colors.purpleAccent.shade200,
+                  color: Colors.blueGrey.withOpacity(0.7),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(
+                        icons[index],
                         color: Colors.yellowAccent,
-                        letterSpacing: 2,
+                        size: 50,
                       ),
-                    ),
-                  ],
+                      Text(
+                        labels[index].toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.yellowAccent,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -81,4 +104,10 @@ class DashboardScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+void navigateToScreens(BuildContext context, Widget screen) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) {
+    return screen;
+  }));
 }

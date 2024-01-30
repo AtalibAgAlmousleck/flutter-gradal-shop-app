@@ -20,9 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
           title: FakeSearch(),
           centerTitle: true,
           bottom: TabBar(
-            isScrollable: true,
             indicatorColor: Colors.yellow,
             indicatorWeight: 8,
+            isScrollable: true,
             tabs: const [
               RepeatedTab(label: 'Men'),
               RepeatedTab(label: 'Women'),

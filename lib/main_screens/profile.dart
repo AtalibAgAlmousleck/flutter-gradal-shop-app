@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gradal/customer_screens/customer_order.dart';
+import 'package:gradal/customer_screens/whislist.dart';
+import 'package:gradal/main_screens/cart.dart';
+import 'package:gradal/widgets/app_bar_widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -113,7 +117,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CartScreen(
+                                  back: AppBarBackButton(),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       Container(
@@ -132,7 +145,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CustomerOrder(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                       Container(
@@ -157,7 +177,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WhisListScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
