@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gradal/main_screens/customer_home_screen.dart';
+import 'package:gradal/main_screens/supplier_home.dart';
 import 'package:gradal/main_screens/welcome_screen.dart';
 
 void main() {
@@ -12,9 +14,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
-      //SupplierHomeScreen(),
-      //CustomerHomeScreen(),
+      //home: WelcomeScreen(),
+      initialRoute: '/welcome_screen',
+      routes: {
+        '/welcome_screen': (content) => WelcomeScreen(),
+        '/customer_home': (context) => CustomerHomeScreen(),
+        '/supplier_home': (context) => SupplierHomeScreen(),
+      },
     );
   }
 }

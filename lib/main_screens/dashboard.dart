@@ -32,7 +32,9 @@ class DashboardScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushReplacementNamed(context, '/welcome_screen');
+            },
             icon: Icon(
               Icons.logout,
               color: Colors.black,
