@@ -1,13 +1,12 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../widgets/auth_widget.dart';
-import '../widgets/snackBar.dart';
-
-// final TextEditingController _nameController = TextEditingController();
-// final TextEditingController _emailController = TextEditingController();
-// final TextEditingController _passwordController = TextEditingController();
+import '../widgets/snack_bar.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CustomerRegister extends StatefulWidget {
   const CustomerRegister({super.key});
@@ -24,6 +23,51 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   late String name;
   late String email;
   late String password;
+
+  XFile? _imageFile;
+  dynamic _pickedImageError;
+  final ImagePicker _picker = ImagePicker();
+
+  //! image with camera
+  void _pickImageCamera() async {
+    try {
+      final pickedImage = await _picker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 300,
+        maxWidth: 300,
+        imageQuality: 95,
+      );
+      setState(() {
+        _imageFile = pickedImage;
+      });
+    } catch (e) {
+      setState(() {
+        _pickedImageError = e;
+      });
+      print(_pickedImageError);
+    }
+  }
+
+  //! pick image with galary
+  void _pickImageGalary() async {
+    try {
+      final pickedImage = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 300,
+        maxWidth: 300,
+        imageQuality: 95,
+      );
+      setState(() {
+        _imageFile = pickedImage;
+      });
+    } catch (e) {
+      setState(() {
+        _pickedImageError = e;
+      });
+      print(_pickedImageError);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
@@ -53,6 +97,11 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                             child: CircleAvatar(
                               radius: 60,
                               backgroundColor: Colors.purpleAccent,
+                              backgroundImage: _imageFile == null
+                                  ? null
+                                  : FileImage(
+                                      File(_imageFile!.path),
+                                    ),
                             ),
                           ),
                           Column(
@@ -72,7 +121,8 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                                     color: Colors.white,
                                   ),
                                   onPressed: () {
-                                    print('Pick image from camera');
+                                    //! camera image
+                                    _pickImageCamera();
                                   },
                                 ),
                               ),
@@ -94,7 +144,8 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                                     color: Colors.white,
                                   ),
                                   onPressed: () {
-                                    print('Pick image from galary');
+                                    //! galary image
+                                    _pickImageGalary();
                                   },
                                 ),
                               ),
@@ -187,15 +238,19 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       AuthButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            print('valid');
-                            setState(() {
-                              // name = _nameController.text;
-                              // email = _emailController.text;
-                              // password = _passwordController.text;
-                            });
-                            print(name);
-                            print(email);
-                            print(password);
+                            if (_imageFile != null) {
+                              print('valid');
+                              print(name);
+                              print(email);
+                              print(password);
+                              _formKey.currentState!.reset();
+                              setState(() {
+                                _imageFile = null;
+                              });
+                            } else {
+                              MyMessageHandler.showSnackBar(
+                                  _scaffoldKey, 'Please pick a profile image.');
+                            }
                           } else {
                             MyMessageHandler.showSnackBar(
                               _scaffoldKey,

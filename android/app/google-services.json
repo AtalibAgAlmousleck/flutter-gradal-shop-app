@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "891347757597",
+    "project_id": "gradal-52757",
+    "storage_bucket": "gradal-52757.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891347757597:android:54a82ed9e2fe4db6e074f4",
+        "android_client_info": {
+          "package_name": "com.example.gradal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsdUlYgsuxwmSk6nfWsD5jm3dHJ-0g0TM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
