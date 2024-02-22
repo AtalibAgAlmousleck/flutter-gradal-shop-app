@@ -1,3 +1,5 @@
+// ignore_for_file: sort_child_properties_last, file_names
+
 import 'package:flutter/cupertino.dart';
 
 class MyAlertDialog {
