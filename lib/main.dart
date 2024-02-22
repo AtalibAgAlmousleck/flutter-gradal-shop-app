@@ -5,7 +5,7 @@ import 'package:gradal/main_screens/supplier_home.dart';
 import 'package:gradal/main_screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());

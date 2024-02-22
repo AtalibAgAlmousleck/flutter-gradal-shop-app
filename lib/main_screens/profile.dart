@@ -1,8 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradal/customer_screens/customer_order.dart';
 import 'package:gradal/customer_screens/whislist.dart';
 import 'package:gradal/main_screens/cart.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
+
+import '../widgets/alert-dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -260,10 +266,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               RepetedListTitle(
                                 title: 'Logout',
                                 icon: Icons.logout,
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    '/welcome_screen',
+                                onPressed: () async {
+                                  MyAlertDialog.showMyDialog(
+                                    context: context,
+                                    title: 'Log Out',
+                                    content: 'Are you sure to log out ?',
+                                    tabNo: () {
+                                      Navigator.pop(context);
+                                    },
+                                    tabYes: () async {
+                                      await FirebaseAuth.instance.signOut();
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacementNamed(
+                                          context, '/welcome_screen');
+                                    },
                                   );
                                 },
                               ),

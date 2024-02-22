@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print, unused_local_variable
+
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +26,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  bool processing = false;
 
   @override
   void initState() {
@@ -256,17 +259,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             image: AssetImage('images/inapp/facebook.jpg')),
                       ),
                       //! sign as a guest
-                      GoogleFacebookLogin(
-                        label: 'Guest',
-                        onPressed: () async {
-                          await FirebaseAuth.instance.signInAnonymously();
-                        },
-                        child: Icon(
-                          Icons.person,
-                          size: 55,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
+                      processing == true
+                          ? CircularProgressIndicator()
+                          : GoogleFacebookLogin(
+                              label: 'Guest',
+                              onPressed: () async {
+                                setState(() {
+                                  processing = true;
+                                });
+                                await FirebaseAuth.instance.signInAnonymously();
+                                Navigator.pushReplacementNamed(
+                                    context, '/customer_home');
+                              },
+                              child: Icon(
+                                Icons.person,
+                                size: 55,
+                                color: Colors.lightBlueAccent,
+                              ),
+                            ),
                     ],
                   ),
                 ),

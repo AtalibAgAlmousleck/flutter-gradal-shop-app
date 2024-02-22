@@ -1,7 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/auth_widget.dart';
@@ -65,6 +66,40 @@ class _CustomerRegisterState extends State<CustomerRegister> {
         _pickedImageError = e;
       });
       print(_pickedImageError);
+    }
+  }
+
+  void signUp() async {
+    if (_formKey.currentState!.validate()) {
+      if (_imageFile != null) {
+        try {
+          await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: password);
+          _formKey.currentState!.reset();
+          setState(() {
+            _imageFile = null;
+          });
+          Navigator.pushReplacementNamed(context, '/customer_home');
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            MyMessageHandler.showSnackBar(
+                _scaffoldKey, 'The password provided is too weak.');
+            //print('');
+          } else if (e.code == 'email-already-in-use') {
+            MyMessageHandler.showSnackBar(
+                _scaffoldKey, 'Account already exists with the given email.');
+            //print('');
+          }
+        }
+      } else {
+        MyMessageHandler.showSnackBar(
+            _scaffoldKey, 'Please pick a profile image.');
+      }
+    } else {
+      MyMessageHandler.showSnackBar(
+        _scaffoldKey,
+        'All fields are required',
+      );
     }
   }
 
@@ -236,27 +271,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       ),
                       //! button
                       AuthButton(
+                        //! registration button
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            if (_imageFile != null) {
-                              print('valid');
-                              print(name);
-                              print(email);
-                              print(password);
-                              _formKey.currentState!.reset();
-                              setState(() {
-                                _imageFile = null;
-                              });
-                            } else {
-                              MyMessageHandler.showSnackBar(
-                                  _scaffoldKey, 'Please pick a profile image.');
-                            }
-                          } else {
-                            MyMessageHandler.showSnackBar(
-                              _scaffoldKey,
-                              'All fields are required',
-                            );
-                          }
+                          signUp();
                         },
                         textLabel: 'Sing Up',
                       ),
