@@ -2,12 +2,14 @@
 
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/auth_widget.dart';
 import '../widgets/snack_bar.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class CustomerRegister extends StatefulWidget {
   const CustomerRegister({super.key});
@@ -24,10 +26,14 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   late String name;
   late String email;
   late String password;
+  late String profileImage;
+  late String _uid;
 
   XFile? _imageFile;
   dynamic _pickedImageError;
   final ImagePicker _picker = ImagePicker();
+  CollectionReference customers =
+      FirebaseFirestore.instance.collection('customers');
 
   //! image with camera
   void _pickImageCamera() async {
@@ -75,10 +81,29 @@ class _CustomerRegisterState extends State<CustomerRegister> {
         try {
           await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password);
+          //! uploaded info
+          firebase_storage.Reference ref = firebase_storage
+              .FirebaseStorage.instance
+              .ref('cust-images/$email.jpg');
+          await ref.putFile(File(_imageFile!.path));
+          _uid = FirebaseAuth.instance.currentUser!.uid;
+
+          profileImage = await ref.getDownloadURL();
+          await customers.doc(_uid).set({
+            'name': name,
+            'emial': email,
+            'profileimage': profileImage,
+            'phone': '',
+            'address': '',
+            'cid': _uid,
+          });
+
           _formKey.currentState!.reset();
           setState(() {
             _imageFile = null;
           });
+
+          //! nagivate to customer home screen
           Navigator.pushReplacementNamed(context, '/customer_home');
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
