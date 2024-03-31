@@ -28,6 +28,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   late String password;
   late String profileImage;
   late String _uid;
+  bool processing = false;
 
   XFile? _imageFile;
   dynamic _pickedImageError;
@@ -105,15 +106,14 @@ class _CustomerRegisterState extends State<CustomerRegister> {
 
           //! nagivate to customer home screen
           Navigator.pushReplacementNamed(context, '/customer_home');
+          ///customer_home
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
             MyMessageHandler.showSnackBar(
                 _scaffoldKey, 'The password provided is too weak.');
-            //print('');
           } else if (e.code == 'email-already-in-use') {
             MyMessageHandler.showSnackBar(
                 _scaffoldKey, 'Account already exists with the given email.');
-            //print('');
           }
         }
       } else {
@@ -292,7 +292,10 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       HaveAccount(
                         haveAccount: 'Have an account?',
                         actionLabel: 'Login',
-                        onPressed: () {},
+                        onPressed: () {
+                          // Navigator.pushReplacementNamed(
+                          //     context, '/customer_login');
+                        },
                       ),
                       //! button
                       AuthButton(
