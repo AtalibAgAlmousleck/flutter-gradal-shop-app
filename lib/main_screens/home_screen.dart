@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gradal/widgets/fake_search.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,6 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return DefaultTabController(
       length: 9,
       child: Scaffold(
+        backgroundColor: Colors.blueGrey.shade100.withOpacity(0.5),
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
@@ -55,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class RepeatedTab extends StatelessWidget {
-  const RepeatedTab({super.key, required this.label});
+  const RepeatedTab({Key? key, required this.label}) : super(key: key);
 
   final String label;
 

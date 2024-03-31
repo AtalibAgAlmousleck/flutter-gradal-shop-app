@@ -58,7 +58,7 @@ class HaveAccount extends StatelessWidget {
         TextButton(
           onPressed: onPressed,
           child: Text(
-            'Login now',
+            actionLabel,
             style: TextStyle(
               fontSize: 20,
               color: Colors.purple,

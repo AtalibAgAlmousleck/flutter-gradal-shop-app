@@ -77,6 +77,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   }
 
   void signUp() async {
+    setState(() {
+      processing = true;
+    });
     if (_formKey.currentState!.validate()) {
       if (_imageFile != null) {
         try {
@@ -92,7 +95,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
           profileImage = await ref.getDownloadURL();
           await customers.doc(_uid).set({
             'name': name,
-            'emial': email,
+            'email': email,
             'profileimage': profileImage,
             'phone': '',
             'address': '',
@@ -106,21 +109,34 @@ class _CustomerRegisterState extends State<CustomerRegister> {
 
           //! nagivate to customer home screen
           Navigator.pushReplacementNamed(context, '/customer_home');
+
           ///customer_home
         } on FirebaseAuthException catch (e) {
+          setState(() {
+            processing = false;
+          });
           if (e.code == 'weak-password') {
             MyMessageHandler.showSnackBar(
                 _scaffoldKey, 'The password provided is too weak.');
           } else if (e.code == 'email-already-in-use') {
+            setState(() {
+              processing = false;
+            });
             MyMessageHandler.showSnackBar(
                 _scaffoldKey, 'Account already exists with the given email.');
           }
         }
       } else {
+        setState(() {
+          processing = false;
+        });
         MyMessageHandler.showSnackBar(
             _scaffoldKey, 'Please pick a profile image.');
       }
     } else {
+      setState(() {
+        processing = false;
+      });
       MyMessageHandler.showSnackBar(
         _scaffoldKey,
         'All fields are required',
@@ -293,18 +309,20 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                         haveAccount: 'Have an account?',
                         actionLabel: 'Login',
                         onPressed: () {
-                          // Navigator.pushReplacementNamed(
-                          //     context, '/customer_login');
+                          Navigator.pushReplacementNamed(
+                              context, '/customer_login');
                         },
                       ),
                       //! button
-                      AuthButton(
-                        //! registration button
-                        onPressed: () {
-                          signUp();
-                        },
-                        textLabel: 'Sing Up',
-                      ),
+                      processing == true
+                          ? const CircularProgressIndicator()
+                          : AuthButton(
+                              //! registration button
+                              onPressed: () {
+                                signUp();
+                              },
+                              textLabel: 'Sing Up',
+                            ),
                     ],
                   ),
                 ),
