@@ -38,13 +38,13 @@ class _CustomerLoginState extends State<CustomerLogin> {
         });
         if (e.code == 'user-not-found') {
           MyMessageHandler.showSnackBar(
-              _scaffoldKey, 'No user found for that email.');
+              _scaffoldKey, 'No user found with that email.');
         } else if (e.code == 'wrong-password') {
           MyMessageHandler.showSnackBar(
-              _scaffoldKey, 'Wrong password provided for that user.');
+              _scaffoldKey, 'Username or password is incorrect.');
         } else {
           MyMessageHandler.showSnackBar(
-              _scaffoldKey, 'An error occurred, please try again later.');
+              _scaffoldKey, 'Username or password is incorrect.');
         }
       } catch (e) {
         setState(() {
