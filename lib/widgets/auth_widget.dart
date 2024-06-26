@@ -92,7 +92,7 @@ class AuthHeaderLabel extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, 'customer_screen');
+              Navigator.pushReplacementNamed(context, '/welcome_screen');
             },
             icon: Icon(
               Icons.home_work,

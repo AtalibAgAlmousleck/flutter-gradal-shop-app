@@ -11,30 +11,30 @@ import '../widgets/snack_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class CustomerRegister extends StatefulWidget {
-  const CustomerRegister({super.key});
+class SupplierSignup extends StatefulWidget {
+  const SupplierSignup({super.key});
 
   @override
-  State<CustomerRegister> createState() => _CustomerRegisterState();
+  State<SupplierSignup> createState() => _SupplierSignupState();
 }
 
-class _CustomerRegisterState extends State<CustomerRegister> {
+class _SupplierSignupState extends State<SupplierSignup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
-      GlobalKey<ScaffoldMessengerState>();
+  GlobalKey<ScaffoldMessengerState>();
   bool passwordVisibility = false;
-  late String name;
+  late String storeName;
   late String email;
   late String password;
-  late String profileImage;
+  late String storeLogo;
   late String _uid;
   bool processing = false;
 
   XFile? _imageFile;
   dynamic _pickedImageError;
   final ImagePicker _picker = ImagePicker();
-  CollectionReference customers =
-      FirebaseFirestore.instance.collection('customers');
+  CollectionReference suppliers =
+  FirebaseFirestore.instance.collection('suppliers');
 
   //! image with camera
   void _pickImageCamera() async {
@@ -88,18 +88,18 @@ class _CustomerRegisterState extends State<CustomerRegister> {
           //! uploaded info
           firebase_storage.Reference ref = firebase_storage
               .FirebaseStorage.instance
-              .ref('cust-images/$email.jpg');
+              .ref('supp-images/$email.jpg');
           await ref.putFile(File(_imageFile!.path));
           _uid = FirebaseAuth.instance.currentUser!.uid;
 
-          profileImage = await ref.getDownloadURL();
-          await customers.doc(_uid).set({
-            'name': name,
+          storeName = await ref.getDownloadURL();
+          await suppliers.doc(_uid).set({
+            'storename': storeName,
             'email': email,
-            'profileimage': profileImage,
+            'storelogo': storeLogo,
             'phone': '',
-            'address': '',
-            'cid': _uid,
+            //'address': '',
+            'sid': _uid,
           });
 
           _formKey.currentState!.reset();
@@ -108,7 +108,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
           });
 
           //! navigate to customer home screen
-          Navigator.pushReplacementNamed(context, '/customer_login');
+          Navigator.pushReplacementNamed(context, '/supplier_login');
 
           ///customer_home
         } on FirebaseAuthException catch (e) {
@@ -176,8 +176,8 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                               backgroundImage: _imageFile == null
                                   ? null
                                   : FileImage(
-                                      File(_imageFile!.path),
-                                    ),
+                                File(_imageFile!.path),
+                              ),
                             ),
                           ),
                           Column(
@@ -240,7 +240,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                             return null;
                           },
                           onChanged: (value) {
-                            name = value;
+                            storeName = value;
                           },
                           //controller: _nameController,
                           decoration: textFormDecoration.copyWith(
@@ -317,12 +317,12 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       processing == true
                           ? const CircularProgressIndicator()
                           : AuthButton(
-                              //! registration button
-                              onPressed: () {
-                                signUp();
-                              },
-                              textLabel: 'Sing Up',
-                            ),
+                        //! registration button
+                        onPressed: () {
+                          signUp();
+                        },
+                        textLabel: 'Sing Up',
+                      ),
                     ],
                   ),
                 ),

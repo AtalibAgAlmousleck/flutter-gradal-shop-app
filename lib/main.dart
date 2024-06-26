@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gradal/authentication/customer_login.dart';
 import 'package:gradal/authentication/customer_signup.dart';
+import 'package:gradal/authentication/supplier_login.dart';
+import 'package:gradal/authentication/supplier_signup.dart';
 import 'package:gradal/main_screens/customer_home_screen.dart';
 import 'package:gradal/main_screens/supplier_home.dart';
 import 'package:gradal/main_screens/welcome_screen.dart';
@@ -27,6 +29,8 @@ class MyApp extends StatelessWidget {
         '/supplier_home': (context) => SupplierHomeScreen(),
         '/customer_signup': (context) => CustomerRegister(),
         '/customer_login': (context) => CustomerLogin(),
+        '/supplier_signup': (context) => SupplierSignup(),
+        '/supplier_login': (context) => SupplierLogin(),
       },
     );
   }
