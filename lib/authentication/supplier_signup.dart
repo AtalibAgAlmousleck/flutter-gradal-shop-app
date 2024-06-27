@@ -85,18 +85,21 @@ class _SupplierSignupState extends State<SupplierSignup> {
         try {
           await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password);
+
           //! uploaded info
           firebase_storage.Reference ref = firebase_storage
               .FirebaseStorage.instance
               .ref('supp-images/$email.jpg');
+
           await ref.putFile(File(_imageFile!.path));
+          storeLogo = await ref.getDownloadURL();
           _uid = FirebaseAuth.instance.currentUser!.uid;
 
           storeName = await ref.getDownloadURL();
           await suppliers.doc(_uid).set({
             'storename': storeName,
             'email': email,
-            'storelogo': storeLogo,
+            'storelogo': storeLogo, //storeLogo,
             'phone': '',
             //'address': '',
             'sid': _uid,
@@ -310,7 +313,7 @@ class _SupplierSignupState extends State<SupplierSignup> {
                         actionLabel: 'Login',
                         onPressed: () {
                           Navigator.pushReplacementNamed(
-                              context, '/customer_login');
+                              context, '/supplier_login');
                         },
                       ),
                       //! button

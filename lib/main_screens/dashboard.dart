@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gradal/dashboard_components/edit_business.dart';
 import 'package:gradal/dashboard_components/manage_product.dart';
@@ -6,6 +7,8 @@ import 'package:gradal/dashboard_components/supplier_balance.dart';
 import 'package:gradal/dashboard_components/supplier_order.dart';
 import 'package:gradal/dashboard_components/supplier_static.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
+
+import '../widgets/alert-dialog.dart';
 
 List<String> labels = [
   'my store',
@@ -43,12 +46,27 @@ class DashboardScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: AppBarTitle(title: 'Bashboard'),
+        title: AppBarTitle(title: 'Dashboard'),
         centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/welcome_screen');
+              //Navigator.pushReplacementNamed(context, '/welcome_screen');
+              MyAlertDialog.showMyDialog(
+                context: context,
+                title: 'Log Out',
+                content: 'Are you sure you want to log out ?',
+                tabNo: () {
+                  Navigator.pop(context);
+                },
+                tabYes: () async {
+                  await FirebaseAuth.instance
+                      .signOut();
+                  Navigator.pop(context);
+                  Navigator.pushReplacementNamed(
+                      context, '/welcome_screen');
+                },
+              );
             },
             icon: Icon(
               Icons.logout,
