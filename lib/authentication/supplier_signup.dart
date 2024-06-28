@@ -30,9 +30,11 @@ class _SupplierSignupState extends State<SupplierSignup> {
   late String _uid;
   bool processing = false;
 
+  final ImagePicker _picker = ImagePicker();
+
   XFile? _imageFile;
   dynamic _pickedImageError;
-  final ImagePicker _picker = ImagePicker();
+
   CollectionReference suppliers =
   FirebaseFirestore.instance.collection('suppliers');
 
