@@ -92,11 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     data['profileimage'],
                                   ),
                                 ),
-                                // CircleAvatar(
-                                //   radius: 50,
-                                //   backgroundImage:
-                                //       AssetImage('images/inapp/guest.jpg'),
-                                // ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 25.0),
                                   child: Text(
