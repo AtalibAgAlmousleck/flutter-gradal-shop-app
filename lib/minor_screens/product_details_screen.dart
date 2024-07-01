@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:gradal/minor_screens/full_screen_view.dart';
 import 'package:gradal/widgets/yellow_button.dart';
 
 import '../models/products_model.dart';
@@ -30,47 +31,54 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           body: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Stack(
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.45,
-                      child: Swiper(
-                        pagination: SwiperPagination(
-                            builder: SwiperPagination.fraction
-                        ),
-                        itemBuilder: (context, index) {
-                          return Image(image: NetworkImage(imagesList[index]),);
-                        },
-                        itemCount: imagesList.length,
-                      ),
-                    ),
-                    Positioned(
-                      left: 15,
-                      top: 20,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.grey,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => FullScreenView(imagesList: imagesList,)
+                    ),);
+                  },
+                  child: Stack(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        child: Swiper(
+                          pagination: SwiperPagination(
+                              builder: SwiperPagination.fraction
+                          ),
+                          itemBuilder: (context, index) {
+                            return Image(image: NetworkImage(imagesList[index]),);
                           },
-                          icon: Icon(Icons.arrow_back, color: Colors.black,),
+                          itemCount: imagesList.length,
                         ),
                       ),
-                    ),
-                    Positioned(
-                      right: 15,
-                      top: 20,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.grey,
-                        child: IconButton(
-                          onPressed: () {
-                            //Navigator.pop(context);
-                          },
-                          icon: Icon(Icons.share, color: Colors.black,),
+                      Positioned(
+                        left: 15,
+                        top: 20,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: Icon(Icons.arrow_back, color: Colors.black,),
+                          ),
                         ),
                       ),
-                    )
-                  ],
+                      Positioned(
+                        right: 15,
+                        top: 20,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          child: IconButton(
+                            onPressed: () {
+                              //Navigator.pop(context);
+                            },
+                            icon: Icon(Icons.share, color: Colors.black,),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8,right: 8, left: 8, bottom: 10),
