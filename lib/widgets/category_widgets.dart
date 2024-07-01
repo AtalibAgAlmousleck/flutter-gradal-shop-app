@@ -78,7 +78,7 @@ class SubcategoryModel extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => SubCategoryProduct(
-              mencategoryName: menCategoryName,
+              mainCategoryName: menCategoryName,
               subcategoryName: subCategoryName,
             ),
           ),

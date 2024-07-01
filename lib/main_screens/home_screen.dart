@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gradal/categories/women_category.dart';
+import 'package:gradal/galleries/men_gallery.dart';
+import 'package:gradal/galleries/women_gallery.dart';
 import 'package:gradal/widgets/fake_search.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -39,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: const TabBarView(
           children: [
-            Center(child: Text('Men screen')),
-            Center(child: Text('Women screen')),
+            MenGalleryScreen(),
+            WomenGalleryScreen(),
             Center(child: Text('Shoes screen')),
             Center(child: Text('Bags screen')),
             Center(child: Text('Electronics screen')),

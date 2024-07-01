@@ -43,6 +43,8 @@ dependencies:
   firebase_core: ^2.25.2
   firebase_app_check: ^0.2.1+17
   uuid: ^4.4.0
+#  flutter_staggered_grid_view: ^0.6.1
+  flutter_staggered_grid_view: ^0.7.0
 
 dev_dependencies:
   flutter_test:
