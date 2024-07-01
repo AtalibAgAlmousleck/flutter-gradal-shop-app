@@ -15,10 +15,10 @@ List<ItemsData> items = [
   ItemsData(label: 'men'),
   ItemsData(label: 'women'),
   ItemsData(label: 'shoes'),
-  ItemsData(label: 'bags'),
-  ItemsData(label: 'electronic'),
-  ItemsData(label: 'accessories'),
-  ItemsData(label: 'garden'),
+  // ItemsData(label: 'bags'),
+  // ItemsData(label: 'electronic'),
+  // ItemsData(label: 'accessories'),
+  // ItemsData(label: 'garden'),
   ItemsData(label: 'kids'),
   ItemsData(label: 'beauty'),
 ];
@@ -79,12 +79,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 duration: const Duration(microseconds: 1000),
                 curve: Curves.bounceInOut,
               );
-              // for (var element in items) {
-              //   element.isSelected = false;
-              // }
-              // setState(() {
-              //   items[index].isSelected = true;
-              // });
             },
             child: Container(
               color: items[index].isSelected == true
@@ -119,10 +113,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
           MenCategroryScreen(),
           WomenCategroryScreen(),
           ShoesCategroryScreen(),
-          BagsCategory(),
-          ElectronicCategory(),
-          AccessoryCategory(),
-          GardenCategory(),
+          // BagsCategory(),
+          // ElectronicCategory(),
+          // AccessoryCategory(),
+          // GardenCategory(),
           KidsCategory(),
           BeautyCategory(),
         ],

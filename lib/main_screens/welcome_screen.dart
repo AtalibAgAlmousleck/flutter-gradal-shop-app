@@ -77,13 +77,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 isRepeatingAnimation: true,
                 repeatForever: true,
               ),
-              // Text(
-              //   'WELCOME',
-              //   style: TextStyle(
-              //     color: Colors.white,
-              //     fontSize: 30,
-              //   ),
-              // ),
               SizedBox(
                 height: 120,
                 width: 200,
@@ -109,13 +102,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   ),
                 ),
               ),
-              // Text(
-              //   'SHOP',
-              //   style: TextStyle(
-              //     color: Colors.white,
-              //     fontSize: 30,
-              //   ),
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[

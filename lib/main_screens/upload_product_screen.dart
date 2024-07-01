@@ -475,21 +475,24 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
       subCategList = men;
     } else if (value == 'women') {
       subCategList = women;
-    } else if (value == 'electronics') {
-      subCategList = electronics;
-    } else if (value == 'accessories') {
-      subCategList = accessories;
-    } else if (value == 'shoes') {
-      subCategList = shoes;
-    } else if (value == 'home & garden') {
-      subCategList = homeandgarden;
-    } else if (value == 'beauty') {
+    }
+    // else if (value == 'electronics') {
+    //   subCategList = electronics;
+    // } else if (value == 'accessories') {
+    //   subCategList = accessories;
+    // } else if (value == 'shoes') {
+    //   subCategList = shoes;
+    // } else if (value == 'home & garden') {
+    //   subCategList = homeandgarden;
+    // }
+    else if (value == 'beauty') {
       subCategList = beauty;
     } else if (value == 'kids') {
       subCategList = kids;
-    } else if (value == 'bags') {
-      subCategList = bags;
     }
+    // else if (value == 'bags') {
+    //   subCategList = bags;
+    // }
     setState(() {
       mainCategoryValue = value!;
       subCategValue = 'subcategory';

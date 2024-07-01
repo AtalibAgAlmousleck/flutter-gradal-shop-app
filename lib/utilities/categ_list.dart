@@ -2,13 +2,13 @@ List<String> maincateg = [
   'select category',
   'men',
   'women',
-  'electronics',
-  'accessories',
+  // 'electronics',
+  // 'accessories',
   'shoes',
-  'home & garden',
+  // 'home & garden',
   'beauty',
   'kids',
-  'bags'
+  // 'bags'
 ];
 
 List<String> men = [
@@ -36,23 +36,23 @@ List<String> women = [
   'jacket',
   'other'
 ];
-List<String> electronics = [
-  'subcategory',
-  'phone',
-  'computer',
-  'laptop',
-  'smart tv',
-  'phone holder',
-  'charger',
-  'usb cables',
-  'head phone',
-  'smart watch',
-  'tablet',
-  'mouse',
-  'keyboard',
-  'gaming',
-  'other'
-];
+// List<String> electronics = [
+//   'subcategory',
+//   'phone',
+//   'computer',
+//   'laptop',
+//   'smart tv',
+//   'phone holder',
+//   'charger',
+//   'usb cables',
+//   'head phone',
+//   'smart watch',
+//   'tablet',
+//   'mouse',
+//   'keyboard',
+//   'gaming',
+//   'other'
+// ];
 
 List<String> shoes = [
   'subcategory',
@@ -72,19 +72,19 @@ List<String> shoes = [
   'other'
 ];
 
-List<String> homeandgarden = [
-  'subcategory',
-  'living room',
-  'bed room',
-  'dinning room',
-  'kitchen tools',
-  'bath access.',
-  'furniture',
-  'decoration',
-  'lighting',
-  'garden',
-  'other'
-];
+// List<String> homeandgarden = [
+//   'subcategory',
+//   'living room',
+//   'bed room',
+//   'dinning room',
+//   'kitchen tools',
+//   'bath access.',
+//   'furniture',
+//   'decoration',
+//   'lighting',
+//   'garden',
+//   'other'
+// ];
 
 List<String> beauty = [
   'subcategory',
@@ -96,20 +96,20 @@ List<String> beauty = [
   'other'
 ];
 
-List<String> accessories = [
-  'subcategory',
-  'hat',
-  'men sunglass',
-  'w sunglass',
-  'classic watch',
-  'gloves',
-  'belt waist',
-  'ring',
-  'necklace',
-  'scarf set',
-  'anklet',
-  'other'
-];
+// List<String> accessories = [
+//   'subcategory',
+//   'hat',
+//   'men sunglass',
+//   'w sunglass',
+//   'classic watch',
+//   'gloves',
+//   'belt waist',
+//   'ring',
+//   'necklace',
+//   'scarf set',
+//   'anklet',
+//   'other'
+// ];
 
 List<String> kids = [
   'subcategory',
@@ -128,14 +128,14 @@ List<String> kids = [
   'other'
 ];
 
-List<String> bags = [
-  'subcategory',
-  'wallet',
-  'clutch',
-  'chest bag',
-  'back pack',
-  'business bags',
-  'laptop bags',
-  'women bags',
-  'other'
-];
+// List<String> bags = [
+//   'subcategory',
+//   'wallet',
+//   'clutch',
+//   'chest bag',
+//   'back pack',
+//   'business bags',
+//   'laptop bags',
+//   'women bags',
+//   'other'
+// ];

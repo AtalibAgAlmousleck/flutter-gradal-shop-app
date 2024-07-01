@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gradal/categories/women_category.dart';
+import 'package:gradal/galleries/beauty_gallery.dart';
+import 'package:gradal/galleries/kids_gallery.dart';
 import 'package:gradal/galleries/men_gallery.dart';
+import 'package:gradal/galleries/shoes_gallery.dart';
 import 'package:gradal/galleries/women_gallery.dart';
 import 'package:gradal/widgets/fake_search.dart';
 
@@ -15,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 9,
+      length: 5,
       child: Scaffold(
         backgroundColor: Colors.blueGrey.shade100.withOpacity(0.5),
         appBar: AppBar(
@@ -31,10 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
               RepeatedTab(label: 'Men'),
               RepeatedTab(label: 'Women'),
               RepeatedTab(label: 'Shoes'),
-              RepeatedTab(label: 'Bags'),
-              RepeatedTab(label: 'Electronics'),
-              RepeatedTab(label: 'Accessories'),
-              RepeatedTab(label: 'Garden'),
+              // RepeatedTab(label: 'Bags'),
+              // RepeatedTab(label: 'Electronics'),
+              // RepeatedTab(label: 'Accessories'),
+              // RepeatedTab(label: 'Garden'),
               RepeatedTab(label: 'Kids'),
               RepeatedTab(label: 'Beauty'),
             ],
@@ -44,13 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             MenGalleryScreen(),
             WomenGalleryScreen(),
-            Center(child: Text('Shoes screen')),
-            Center(child: Text('Bags screen')),
-            Center(child: Text('Electronics screen')),
-            Center(child: Text('Accessories screen')),
-            Center(child: Text('Garden screen')),
-            Center(child: Text('Kids screen')),
-            Center(child: Text('Beauty screen')),
+            ShoesGalleryScreen(),
+            // Center(child: Text('Bags screen')),
+            // Center(child: Text('Electronics screen')),
+            // Center(child: Text('Accessories screen')),
+            // Center(child: Text('Garden screen')),
+            KidsGalleryScreen(),
+            BeautyGalleryScreen(),
           ],
         ),
       ),
