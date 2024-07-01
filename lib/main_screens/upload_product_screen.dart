@@ -381,6 +381,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({super.key});
@@ -392,15 +393,17 @@ class UploadProductScreen extends StatefulWidget {
 class _UploadProductScreenState extends State<UploadProductScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
-  GlobalKey<ScaffoldMessengerState>();
+      GlobalKey<ScaffoldMessengerState>();
 
   late double price;
   late int quantity;
   late String productName;
   late String productDescription;
+  late String proId;
   String mainCategoryValue = 'select category';
   String subCategValue = 'subcategory';
   List<String> subCategList = [];
+  bool processing = false;
 
   final ImagePicker _picker = ImagePicker();
   List<XFile>? imageFileList = [];
@@ -494,26 +497,28 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   }
 
   Future<void> uploadImages() async {
-    if (mainCategoryValue != 'select category' && subCategValue != 'subcategory') {
+    if (mainCategoryValue != 'select category' &&
+        subCategValue != 'subcategory') {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         if (imageFileList!.isNotEmpty) {
-
+          setState(() {
+            processing = true;
+          });
           try {
             for (var image in imageFileList!) {
-              firebase_storage.Reference ref =
-              firebase_storage.FirebaseStorage.instance.ref(
-                  'products/${path.basename(image.path)}'
-              );
-              await ref.putFile(File(image.path))
-                  .whenComplete(() async {
+              firebase_storage.Reference ref = firebase_storage
+                  .FirebaseStorage.instance
+                  .ref('products/${path.basename(image.path)}');
+              await ref.putFile(File(image.path)).whenComplete(() async {
                 await ref.getDownloadURL().then((value) {
                   imageUriList.add(value);
                 });
               });
             }
-          }catch(e) {print(e);}
-          
+          } catch (e) {
+            print(e);
+          }
         } else {
           MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick images');
         }
@@ -531,26 +536,30 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   void uploadData() async {
     if (imageUriList.isNotEmpty) {
       CollectionReference productRef =
-        FirebaseFirestore.instance.collection('products');
-        await productRef.doc().set({
-          'maincateg': mainCategoryValue,
-          'subcateg': subCategValue,
-          'price': price,
-          'instock': quantity,
-          'proname': productName,
-          'prodesc': productDescription,
-          'sid': FirebaseAuth.instance.currentUser!.uid,
-          'proimages': imageUriList,
-          'discount': 0
-        }).whenComplete(() {
-          setState(() {
-            imageFileList = [];
-            mainCategoryValue = 'select category';
-            subCategList = [];
-            imageUriList = [];
-          });
-          _formKey.currentState!.reset();
+          FirebaseFirestore.instance.collection('products');
+      proId = const Uuid().v4();
+
+      await productRef.doc(proId).set({
+        'proid': proId,
+        'maincateg': mainCategoryValue,
+        'subcateg': subCategValue,
+        'price': price,
+        'instock': quantity,
+        'proname': productName,
+        'prodesc': productDescription,
+        'sid': FirebaseAuth.instance.currentUser!.uid,
+        'proimages': imageUriList,
+        'discount': 0
+      }).whenComplete(() {
+        setState(() {
+          processing = false;
+          imageFileList = [];
+          mainCategoryValue = 'select category';
+          subCategList = [];
+          imageUriList = [];
         });
+        _formKey.currentState!.reset();
+      });
     } else {
       print('no images uploaded');
     }
@@ -580,15 +589,16 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                         child: Container(
                           color: Colors.blueGrey.shade100,
                           height: MediaQuery.of(context).size.width * 0.5,
-                          child: imageFileList != null && imageFileList!.isNotEmpty
-                              ? previewImages()
-                              : Center(
-                            child: const Text(
-                              'You have not \n \n picked images yet!',
-                              style: TextStyle(fontSize: 16),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                          child:
+                              imageFileList != null && imageFileList!.isNotEmpty
+                                  ? previewImages()
+                                  : Center(
+                                      child: const Text(
+                                        'You have not \n \n picked images yet!',
+                                        style: TextStyle(fontSize: 16),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
                         ),
                       ),
                     ],
@@ -615,7 +625,8 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                             onSaved: (value) {
                               price = double.parse(value!);
                             },
-                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
                             decoration: textFormDecoration.copyWith(
                               labelText: 'Price',
                               hintText: 'Price \$',
@@ -751,31 +762,32 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
               child: FloatingActionButton(
                 onPressed: imageFileList!.isEmpty
                     ? () {
-                  _pickProductImages();
-                }
+                        _pickProductImages();
+                      }
                     : () {
-                  setState(() {
-                    imageFileList = [];
-                  });
-                },
+                        setState(() {
+                          imageFileList = [];
+                        });
+                      },
                 backgroundColor: Colors.yellow,
                 child: imageFileList!.isEmpty
                     ? Icon(
-                  Icons.photo_library,
-                  color: Colors.black,
-                )
+                        Icons.photo_library,
+                        color: Colors.black,
+                      )
                     : Icon(
-                  Icons.delete_forever,
-                  color: Colors.red,
-                ),
+                        Icons.delete_forever,
+                        color: Colors.red,
+                      ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: FloatingActionButton(
-                onPressed: uploadProduct,
+                onPressed: processing == true ? null : uploadProduct,
                 backgroundColor: Colors.yellow,
-                child: Icon(
+                child: processing == true ?
+                const CircularProgressIndicator() : Icon(
                   Icons.upload,
                   color: Colors.black,
                 ),
@@ -817,8 +829,6 @@ extension PriceValidator on String {
         .hasMatch(this);
   }
 }
-
-
 
 //todo: another solution builder
 // import 'dart:io';

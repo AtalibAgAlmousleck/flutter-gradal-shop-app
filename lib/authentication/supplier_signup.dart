@@ -166,7 +166,7 @@ class _SupplierSignupState extends State<SupplierSignup> {
                   child: Column(
                     children: [
                       AuthHeaderLabel(
-                        headerLabel: 'SignUp',
+                        headerLabel: 'SignUp Supplier',
                       ),
                       Row(
                         children: [
@@ -320,13 +320,14 @@ class _SupplierSignupState extends State<SupplierSignup> {
                       ),
                       //! button
                       processing == true
-                          ? const CircularProgressIndicator()
+                          ? const CircularProgressIndicator(
+                        color: Colors.purple,
+                      )
                           : AuthButton(
-                        //! registration button
+                        textLabel: 'Sing Up',
                         onPressed: () {
                           signUp();
                         },
-                        textLabel: 'Sing Up',
                       ),
                     ],
                   ),

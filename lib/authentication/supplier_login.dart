@@ -83,7 +83,7 @@ class _SupplierLoginState extends State<SupplierLogin> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AuthHeaderLabel(
-                        headerLabel: 'Login',
+                        headerLabel: 'Login Supplier',
                       ),
                       SizedBox(height: 50),
                       //! started text form for the login form.
@@ -160,7 +160,7 @@ class _SupplierLoginState extends State<SupplierLogin> {
                         actionLabel: 'Sign Up',
                         onPressed: () {
                           Navigator.pushReplacementNamed(
-                              context, '/customer_signup');
+                              context, '/supplier_signup');
                         },
                       ),
                       //! button
