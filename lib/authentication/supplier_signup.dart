@@ -97,7 +97,7 @@ class _SupplierSignupState extends State<SupplierSignup> {
           storeLogo = await ref.getDownloadURL();
           _uid = FirebaseAuth.instance.currentUser!.uid;
 
-          storeName = await ref.getDownloadURL();
+          await ref.getDownloadURL();
           await suppliers.doc(_uid).set({
             'storename': storeName,
             'email': email,
