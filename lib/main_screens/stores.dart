@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gradal/minor_screens/visit_store.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
 class StoresScreen extends StatelessWidget {
@@ -29,33 +30,39 @@ class StoresScreen extends StatelessWidget {
                  crossAxisCount: 2
                ),
                itemBuilder: (context, index) {
-                 return Column(
-                   children: [
-                     Stack(
-                       children: [
-                         SizedBox(
-                           height: 120, width: 120,
-                           child: Image.network(snapshot.data!.docs[index]['storelogo']),
-                           //Image.asset('images/inapp/almousleck.jpg'),
-                         ),
-                         // Positioned(
-                         //   bottom: 28, left: 10,
-                         //   child: SizedBox(
-                         //     height: 48, width: 100,
-                         //     child: Image.network(snapshot.data!.docs[index]['storelogo'],
-                         //     fit: BoxFit.cover,),
-                         //
-                         //   ),
-                         // ),
-                       ],
-                     ),
-                     Text(snapshot.data!.docs[index]['storename'],
-                     style: TextStyle(
-                       fontSize: 24,
-                       fontWeight: FontWeight.w600,
-                       fontStyle: FontStyle.italic
-                     ),),
-                   ],
+                 return GestureDetector(
+                   onTap: () {
+                     Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                         VisitStore(suppId: snapshot.data!.docs[index]['sid'],)));
+                   },
+                   child: Column(
+                     children: [
+                       Stack(
+                         children: [
+                           SizedBox(
+                             height: 120, width: 120,
+                             child: Image.network(snapshot.data!.docs[index]['storelogo']),
+                             //Image.asset('images/inapp/almousleck.jpg'),
+                           ),
+                           // Positioned(
+                           //   bottom: 28, left: 10,
+                           //   child: SizedBox(
+                           //     height: 48, width: 100,
+                           //     child: Image.network(snapshot.data!.docs[index]['storelogo'],
+                           //     fit: BoxFit.cover,),
+                           //
+                           //   ),
+                           // ),
+                         ],
+                       ),
+                       Text(snapshot.data!.docs[index]['storename'],
+                       style: TextStyle(
+                         fontSize: 24,
+                         fontWeight: FontWeight.w600,
+                         fontStyle: FontStyle.italic
+                       ),),
+                     ],
+                   ),
                  );
                },
            );
