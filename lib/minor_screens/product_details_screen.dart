@@ -7,8 +7,10 @@ import 'package:gradal/minor_screens/full_screen_view.dart';
 import 'package:gradal/minor_screens/visit_store.dart';
 import 'package:gradal/providers/cart_provider.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
+import 'package:gradal/widgets/snack_bar.dart';
 import 'package:gradal/widgets/yellow_button.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 import '../models/products_model.dart';
 
@@ -21,6 +23,7 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   late List<dynamic> imagesList = widget.prodList['proimages'];
 
   @override
@@ -32,209 +35,219 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         .snapshots();
     return Material(
       child: SafeArea(
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => FullScreenView(imagesList: imagesList,)
-                    ),);
-                  },
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.45,
-                        child: Swiper(
-                          pagination: SwiperPagination(
-                              builder: SwiperPagination.fraction
-                          ),
-                          itemBuilder: (context, index) {
-                            return Image(image: NetworkImage(imagesList[index]),);
-                          },
-                          itemCount: imagesList.length,
-                        ),
-                      ),
-                      Positioned(
-                        left: 15,
-                        top: 20,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          child: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: Icon(Icons.arrow_back, color: Colors.black,),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 15,
-                        top: 20,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          child: IconButton(
-                            onPressed: () {
-                              //Navigator.pop(context);
-                            },
-                            icon: Icon(Icons.share, color: Colors.black,),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8,right: 8, left: 8, bottom: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                      widget.prodList['proname'],
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Text('USD ', style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),),
-                              Text(widget.prodList['price'].toStringAsFixed(2), style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              ),
-                            ],
-                          ),
-                          IconButton(onPressed:() {
-                          },
-                            icon: Icon(Icons.favorite_border_outlined,
-                              color: Colors.red,
-                              size: 30,
-                            ),),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Text(
-                  (widget.prodList['instock'].toString()) + (' pieces available in stock'),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.blueGrey,
-                ),),
-                ProDetailsHear(
-                  label: ' Item description ',
-                ),
-                Text(
-                  widget.prodList['prodesc'],
-                textScaleFactor: 1.1,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.blueGrey.shade800,
-                ),),
-                ProDetailsHear(
-                  label: ' Recommended Items ',
-                ),
-                SizedBox(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: _productsStream,
-                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Something went wrong');
-                      }
-
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                          ),
-                        );
-                      }
-                      if (snapshot.data!.docs.isEmpty) {
-                        return Center(
-                          child: Text('This category has no items yet!',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),),
-                        );
-                      }
-                      return SingleChildScrollView(
-                        child: StaggeredGrid.count(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 4,
-                          crossAxisSpacing: 4,
-                          children: List.generate(snapshot.data!.docs.length, (index) {
-                            var doc = snapshot.data!.docs[index];
-                            return StaggeredGridTile.fit(
-                              crossAxisCellCount: 1,
-                              child: ProductModel(
-                                doc: doc,
-                                products: snapshot.data!.docs[index],
-                              ),
-                            );
-                          }),
-                        ),
-                      );
+        child: ScaffoldMessenger(
+          key: _scaffoldKey,
+          child: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => FullScreenView(imagesList: imagesList,)
+                      ),);
                     },
+                    child: Stack(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.45,
+                          child: Swiper(
+                            pagination: SwiperPagination(
+                                builder: SwiperPagination.fraction
+                            ),
+                            itemBuilder: (context, index) {
+                              return Image(image: NetworkImage(imagesList[index]),);
+                            },
+                            itemCount: imagesList.length,
+                          ),
+                        ),
+                        Positioned(
+                          left: 15,
+                          top: 20,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.arrow_back, color: Colors.black,),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 15,
+                          top: 20,
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            child: IconButton(
+                              onPressed: () {
+                                //Navigator.pop(context);
+                              },
+                              icon: Icon(Icons.share, color: Colors.black,),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8,right: 8, left: 8, bottom: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                        widget.prodList['proname'],
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Text('USD ', style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),),
+                                Text(widget.prodList['price'].toStringAsFixed(2), style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                ),
+                              ],
+                            ),
+                            IconButton(onPressed:() {
+                            },
+                              icon: Icon(Icons.favorite_border_outlined,
+                                color: Colors.red,
+                                size: 30,
+                              ),),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    (widget.prodList['instock'].toString()) + (' pieces available in stock'),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blueGrey,
+                  ),),
+                  ProDetailsHear(
+                    label: ' Item description ',
+                  ),
+                  Text(
+                    widget.prodList['prodesc'],
+                  textScaleFactor: 1.1,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.blueGrey.shade800,
+                  ),),
+                  ProDetailsHear(
+                    label: ' Recommended Items ',
+                  ),
+                  SizedBox(
+                    child: StreamBuilder<QuerySnapshot>(
+                      stream: _productsStream,
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return Text('Something went wrong');
+                        }
+
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                            ),
+                          );
+                        }
+                        if (snapshot.data!.docs.isEmpty) {
+                          return Center(
+                            child: Text('This category has no items yet!',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),),
+                          );
+                        }
+                        return SingleChildScrollView(
+                          child: StaggeredGrid.count(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 4,
+                            crossAxisSpacing: 4,
+                            children: List.generate(snapshot.data!.docs.length, (index) {
+                              var doc = snapshot.data!.docs[index];
+                              return StaggeredGridTile.fit(
+                                crossAxisCellCount: 1,
+                                child: ProductModel(
+                                  doc: doc,
+                                  products: snapshot.data!.docs[index],
+                                ),
+                              );
+                            }),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          bottomSheet: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: [
-                    IconButton(
+            bottomSheet: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                              VisitStore(suppId: widget.prodList['sid']),),);
+                        },
+                        icon: Icon(Icons.store),
+                      ),
+                      SizedBox(width: 20,),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context, MaterialPageRoute(builder: (context)
+                          => CartScreen(back: const AppBarBackButton(),
+                          ),),);
+                        },
+                        icon: Icon(Icons.shopping_cart),
+                      ),
+                    ],
+                  ),
+                  YellowButton(
+                      label: 'ADD TO CART',
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                            VisitStore(suppId: widget.prodList['sid']),),);
-                      },
-                      icon: Icon(Icons.store),
-                    ),
-                    SizedBox(width: 20,),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context, MaterialPageRoute(builder: (context)
-                        => CartScreen(back: const AppBarBackButton(),
-                        ),),);
-                      },
-                      icon: Icon(Icons.shopping_cart),
-                    ),
-                  ],
-                ),
-                YellowButton(
-                    label: 'ADD TO CART', 
-                    onPressed: () {
-                      context.read<Cart>()
-                      .addItem(
-                          widget.prodList['proname'],
-                          widget.prodList['price'],
-                          1,
-                          widget.prodList['instock'],
-                          widget.prodList['proimages'],
-                          widget.prodList['proid'],
-                          widget.prodList['sid']
-                      );
-                    }
-                    , width: 0.5
-                ),
-              ],
+                        // fetch products by id: check if the item added in the cart
+                        context.read<Cart>().getItems.firstWhereOrNull(
+                            (product) =>
+                                product.documentId == widget.prodList['proid']
+                        ) != null ? MyMessageHandler.showSnackBar(
+                          _scaffoldKey, 'Item already added to cart'
+                        ) :
+                        context.read<Cart>()
+                        .addItem(
+                            widget.prodList['proname'],
+                            widget.prodList['price'],
+                            1,
+                            widget.prodList['instock'],
+                            widget.prodList['proimages'],
+                            widget.prodList['proid'],
+                            widget.prodList['sid']
+                        );
+                      }
+                      , width: 0.5
+                  ),
+                ],
+              ),
             ),
           ),
         ),
