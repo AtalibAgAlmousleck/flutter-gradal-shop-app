@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gradal/dashboard_components/edit_business.dart';
 import 'package:gradal/dashboard_components/manage_product.dart';
-import 'package:gradal/dashboard_components/store.dart';
 import 'package:gradal/dashboard_components/supplier_balance.dart';
 import 'package:gradal/dashboard_components/supplier_order.dart';
 import 'package:gradal/dashboard_components/supplier_static.dart';
+import 'package:gradal/minor_screens/visit_store.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
 import '../widgets/alert-dialog.dart';
@@ -29,7 +29,8 @@ List<IconData> icons = [
 ];
 
 List<Widget> pages = [
-  MyStore(),
+  //MyStore(),
+  VisitStore(suppId: FirebaseAuth.instance.currentUser!.uid),
   SupplierOrder(),
   EditBusiness(),
   ManageProduct(),

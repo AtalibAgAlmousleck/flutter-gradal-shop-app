@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:gradal/minor_screens/full_screen_view.dart';
+import 'package:gradal/minor_screens/visit_store.dart';
 import 'package:gradal/widgets/yellow_button.dart';
 
 import '../models/products_model.dart';
@@ -194,7 +195,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               children: <Widget>[
                 Row(
                   children: [
-                    IconButton(onPressed: () {}, icon: Icon(Icons.store),),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                            VisitStore(suppId: widget.prodList['sid']),),);
+                      },
+                      icon: Icon(Icons.store),
+                    ),
                     SizedBox(width: 20,),
                     IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart),),
                   ],
