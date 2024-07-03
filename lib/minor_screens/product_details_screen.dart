@@ -2,9 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:gradal/main_screens/cart.dart';
 import 'package:gradal/minor_screens/full_screen_view.dart';
 import 'package:gradal/minor_screens/visit_store.dart';
+import 'package:gradal/providers/cart_provider.dart';
+import 'package:gradal/widgets/app_bar_widgets.dart';
 import 'package:gradal/widgets/yellow_button.dart';
+import 'package:provider/provider.dart';
 
 import '../models/products_model.dart';
 
@@ -203,10 +207,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       icon: Icon(Icons.store),
                     ),
                     SizedBox(width: 20,),
-                    IconButton(onPressed: () {}, icon: Icon(Icons.shopping_cart),),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context, MaterialPageRoute(builder: (context)
+                        => CartScreen(back: const AppBarBackButton(),
+                        ),),);
+                      },
+                      icon: Icon(Icons.shopping_cart),
+                    ),
                   ],
                 ),
-                YellowButton(label: 'ADD TO CART', onPressed: () {}, width: 0.5),
+                YellowButton(
+                    label: 'ADD TO CART', 
+                    onPressed: () {
+                      context.read<Cart>()
+                      .addItem(
+                          widget.prodList['proname'],
+                          widget.prodList['price'],
+                          1,
+                          widget.prodList['instock'],
+                          widget.prodList['proimages'],
+                          widget.prodList['proid'],
+                          widget.prodList['sid']
+                      );
+                    }
+                    , width: 0.5
+                ),
               ],
             ),
           ),
