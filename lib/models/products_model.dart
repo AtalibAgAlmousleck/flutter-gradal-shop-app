@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gradal/minor_screens/product_details_screen.dart';
@@ -62,9 +63,20 @@ class ProductModel extends StatelessWidget {
                               color: Colors.red,
                               fontSize: 16, fontWeight: FontWeight.w600
                           ),),
-                        IconButton(onPressed: () {},
-                            icon: Icon(Icons.favorite_border_outlined,
-                              color: Colors.red,)),
+                        products['sid'] == FirebaseAuth.instance.currentUser!.uid ?
+                        IconButton(
+                          onPressed: () {},
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.red,
+                            ),
+                        ) : IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.favorite_border_outlined,
+                            color: Colors.red,
+                          ),
+                        )
                       ],
                     ),
                   ],

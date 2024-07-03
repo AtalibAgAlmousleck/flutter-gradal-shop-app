@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
+import 'package:gradal/widgets/app_bar_widgets.dart';
 import '../models/products_model.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class VisitStore extends StatefulWidget {
   final String suppId;
@@ -48,9 +50,11 @@ class _VisitStoreState extends State<VisitStore> {
           return Scaffold(
             backgroundColor: Colors.blueGrey.shade100,
             appBar: AppBar(
-              toolbarHeight: 100,
+              toolbarHeight: 120,
               flexibleSpace: Image.asset('images/inapp/coverimage.jpg',
-              fit: BoxFit.cover,),
+              fit: BoxFit.cover,
+              ),
+              leading: YellowBarBackButton(),
               title: Row(
                 children: <Widget>[
                   Container(
@@ -86,7 +90,28 @@ class _VisitStoreState extends State<VisitStore> {
                             ),
                           ],
                         ),
+                        //todo: if it's store owner else no owner
+                        data['sid'] == FirebaseAuth.instance.currentUser!.uid ?
                         Container(
+                          height: 35,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          decoration: BoxDecoration(
+                            color: Colors.yellow,
+                            border: Border.all(width: 3, color: Colors.black),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: const <Widget>[
+                                Text('Edit', style: TextStyle(fontSize: 20),),
+                                Icon(Icons.edit, color: Colors.black, size: 30,),
+                              ],
+                            ),
+                          ),
+                        ) //todo: if it's store owner else no owner
+                            : Container(
                           height: 35,
                           width: MediaQuery.of(context).size.width * 0.3,
                           decoration: BoxDecoration(
@@ -101,9 +126,9 @@ class _VisitStoreState extends State<VisitStore> {
                               });
                             },
                             child: following == true ?  Text('following')
-                            : Text('FOLLOW'),
+                                : Text('FOLLOW'),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -155,6 +180,12 @@ class _VisitStoreState extends State<VisitStore> {
                   );
                 },
               ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.green,
+              onPressed: () {
+              },
+              child: Icon(FontAwesomeIcons.whatsapp, color: Colors.white, size: 40,),
             ),
           );
         }
