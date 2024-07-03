@@ -13,6 +13,7 @@ class VisitStore extends StatefulWidget {
 }
 
 class _VisitStoreState extends State<VisitStore> {
+  bool following = false;
   @override
   Widget build(BuildContext context) {
     CollectionReference suppliers = FirebaseFirestore.instance.collection('suppliers');
@@ -58,52 +59,102 @@ class _VisitStoreState extends State<VisitStore> {
                       border: Border.all(width: 4, color: Colors.yellow),
                       borderRadius: BorderRadius.circular(15),
                     ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(data['storelogo'],
+                      fit: BoxFit.cover,),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 100,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(data['storename'].toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.yellow,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 20,
+                              ),),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: 35,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          decoration: BoxDecoration(
+                            color: Colors.yellow,
+                            border: Border.all(width: 3, color: Colors.black),
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: MaterialButton(
+                            onPressed: () {
+                              setState(() {
+                                following = !following;
+                              });
+                            },
+                            child: following == true ?  Text('following')
+                            : Text('FOLLOW'),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            body: StreamBuilder<QuerySnapshot>(
-              stream: _productsStream,
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Something went wrong');
-                }
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _productsStream,
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Something went wrong');
+                  }
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Material(
-                    child: Center(
-                      child: CircularProgressIndicator(
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Material(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                        ),
                       ),
+                    );
+                  }
+                  if (snapshot.data!.docs.isEmpty) {
+                    return Center(
+                      child: Text('This Store has no items yet!',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                        ),),
+                    );
+                  }
+                  return SingleChildScrollView(
+                    child: StaggeredGrid.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4,
+                      children: List.generate(snapshot.data!.docs.length, (index) {
+                        var doc = snapshot.data!.docs[index];
+                        return StaggeredGridTile.fit(
+                          crossAxisCellCount: 1,
+                          child: ProductModel(
+                            doc: doc,
+                            products: snapshot.data!.docs[index],
+                          ),
+                        );
+                      }),
                     ),
                   );
-                }
-                if (snapshot.data!.docs.isEmpty) {
-                  return Center(
-                    child: Text('This Store has no items yet!',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),),
-                  );
-                }
-                return SingleChildScrollView(
-                  child: StaggeredGrid.count(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 4,
-                    children: List.generate(snapshot.data!.docs.length, (index) {
-                      var doc = snapshot.data!.docs[index];
-                      return StaggeredGridTile.fit(
-                        crossAxisCellCount: 1,
-                        child: ProductModel(
-                          doc: doc,
-                          products: snapshot.data!.docs[index],
-                        ),
-                      );
-                    }),
-                  ),
-                );
-              },
+                },
+              ),
             ),
           );
         }
