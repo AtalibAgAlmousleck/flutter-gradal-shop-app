@@ -60,6 +60,15 @@ class Cart extends ChangeNotifier {
     notifyListeners();
   }
 
+  double get totalPrice {
+    var total = 0.0;
+
+    for (var item in _list) {
+      total += item.price * item.quantity;
+    }
+    return total;
+  }
+
   void decrement(Product product) {
     product.decrease();
     notifyListeners();
