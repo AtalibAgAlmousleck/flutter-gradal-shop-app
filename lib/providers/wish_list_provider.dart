@@ -13,14 +13,14 @@ class WishList extends ChangeNotifier {
     return _list.length;
   }
 
-  void addWishItem (
+  Future<void> addWishItem (
       String name,
       double price,
       int quantity,
       int bigQuantity,
       List imagesUrl,
       String documentId,
-      String suppId) {
+      String suppId) async {
     final product = Product(name: name, price: price,
         quantity: quantity, bigQuantity: bigQuantity,
         imagesUrl: imagesUrl, documentId: documentId, suppId: suppId);

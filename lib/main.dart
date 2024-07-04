@@ -16,10 +16,9 @@ void main() async {
   await Firebase.initializeApp();
   runApp(
       MultiProvider(
-
         providers: [
           ChangeNotifierProvider(create: (_) => Cart()),
-          ChangeNotifierProvider(create: (_) => WishList())
+          ChangeNotifierProvider(create: (_) => WishList()),
         ],
           child: MyApp()
       )
