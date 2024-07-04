@@ -2,10 +2,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:gradal/providers/products_class.dart';
 
-class Cart extends ChangeNotifier {
+class WishList extends ChangeNotifier {
   final List<Product> _list = [];
 
-  List<Product> get getItems {
+  List<Product> get getWishList {
     return _list;
   }
 
@@ -13,7 +13,7 @@ class Cart extends ChangeNotifier {
     return _list.length;
   }
 
-  void addItem (
+  void addWishItem (
       String name,
       double price,
       int quantity,
@@ -28,32 +28,18 @@ class Cart extends ChangeNotifier {
     notifyListeners();
   }
 
-  void increment(Product product) {
-    product.increase();
-    notifyListeners();
-  }
-
-  double get totalPrice {
-    var total = 0.0;
-
-    for (var item in _list) {
-      total += item.price * item.quantity;
-    }
-    return total;
-  }
-
-  void decrement(Product product) {
-    product.decrease();
-    notifyListeners();
-  }
-
   void removeItem(Product product) {
     _list.remove(product);
     notifyListeners();
   }
 
-  void clearCart() {
+  void clearWishList() {
     _list.clear();
+    notifyListeners();
+  }
+
+  void removeThis(String id) {
+    _list.removeWhere((element) => element.documentId == id);
     notifyListeners();
   }
 }

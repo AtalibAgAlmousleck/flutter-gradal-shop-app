@@ -8,6 +8,7 @@ import 'package:gradal/main_screens/supplier_home.dart';
 import 'package:gradal/main_screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gradal/providers/cart_provider.dart';
+import 'package:gradal/providers/wish_list_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -15,8 +16,10 @@ void main() async {
   await Firebase.initializeApp();
   runApp(
       MultiProvider(
+
         providers: [
-          ChangeNotifierProvider(create: (_) => Cart())
+          ChangeNotifierProvider(create: (_) => Cart()),
+          ChangeNotifierProvider(create: (_) => WishList())
         ],
           child: MyApp()
       )

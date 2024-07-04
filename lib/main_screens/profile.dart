@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradal/customer_screens/customer_order.dart';
-import 'package:gradal/customer_screens/whislist.dart';
+import 'package:gradal/customer_screens/wish_list.dart';
 import 'package:gradal/main_screens/cart.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
@@ -211,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WhisListScreen(),
+                                      builder: (context) => WishListScreen(),
                                     ),
                                   );
                                 },

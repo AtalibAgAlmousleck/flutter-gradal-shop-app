@@ -6,6 +6,7 @@ import 'package:gradal/main_screens/cart.dart';
 import 'package:gradal/minor_screens/full_screen_view.dart';
 import 'package:gradal/minor_screens/visit_store.dart';
 import 'package:gradal/providers/cart_provider.dart';
+import 'package:gradal/providers/wish_list_provider.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 import 'package:gradal/widgets/snack_bar.dart';
 import 'package:gradal/widgets/yellow_button.dart';
@@ -120,12 +121,42 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ),
                               ],
                             ),
-                            IconButton(onPressed:() {
+                            IconButton(
+                              onPressed:() {
+                              context.read<WishList>()
+                                  .getWishList.firstWhereOrNull((product) =>
+                                  product.documentId == widget.prodList['proid'])
+                                  != null ?
+                                  context.read<WishList>()
+                                  .removeThis(widget.prodList['proid'])
+                                  :
+                              context.read<WishList>()
+                                  .addWishItem(
+                                  widget.prodList['proname'],
+                                  widget.prodList['price'],
+                                  1,
+                                  widget.prodList['instock'],
+                                  widget.prodList['proimages'],
+                                  widget.prodList['proid'],
+                                  widget.prodList['sid']
+                              );
                             },
-                              icon: Icon(Icons.favorite_border_outlined,
+                              icon: context.watch()<WishList>()
+                                  .getWishList.firstWhereOrNull((product) =>
+                                  product.documentId == widget.prodList['proid'])
+                                  != null ?
+                              Icon(
+
+                                Icons.favorite,
                                 color: Colors.red,
                                 size: 30,
-                              ),),
+                              ) :
+                              Icon(
+                                Icons.favorite_border,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                            ),
                           ],
                         ),
                       ],
