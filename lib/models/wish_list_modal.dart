@@ -17,7 +17,7 @@ class WishListModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(8.0),
       child: Card(
         child: SizedBox(
           height: 100,
@@ -31,7 +31,7 @@ class WishListModal extends StatelessWidget {
               ),
               Flexible(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(5.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,8 +40,8 @@ class WishListModal extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          //fontWeight: FontWeight.w600,
                           //color: Colors.grey.shade700
                         ),),
                       Row(

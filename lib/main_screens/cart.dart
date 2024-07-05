@@ -5,6 +5,7 @@ import 'package:gradal/widgets/alert-dialog.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 import 'package:provider/provider.dart';
 
+import '../minor_screens/place_order.dart';
 import '../models/cart_item_modal.dart';
 import '../widgets/yellow_button.dart';
 
@@ -20,6 +21,7 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
+    double total = context.watch<Cart>().totalPrice;
     return Material(
       child: SafeArea(
         child: Scaffold(
@@ -60,7 +62,7 @@ class _CartScreenState extends State<CartScreen> {
           CartItems() :
           EmptyCart(),
           bottomSheet: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -72,7 +74,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     Text(
                       //todo: calculate item together
-                      context.watch<Cart>().totalPrice.toStringAsFixed(2),
+                      total.toStringAsFixed(2),
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -81,11 +83,26 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ],
                 ),
-                YellowButton(
-                  width: 0.45,
-                  label: 'Check Out',
-                  onPressed: () {},
-                )
+                Container(
+                  height: 35,
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: MaterialButton(
+                    onPressed: total == 0.0 ? null : () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)
+                      => PlaceOrderScreen()));
+                    },
+                    child: const Text('CHECK OUT'),
+                  ),
+                ),
+                // YellowButton(
+                //   width: 0.45,
+                //   label: 'Check Out',
+                //   onPressed: total == 0.0 ? null : () {},
+                // ),
               ],
             ),
           ),

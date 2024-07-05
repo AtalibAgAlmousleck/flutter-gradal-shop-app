@@ -5,6 +5,11 @@ import 'package:gradal/main_screens/category_screen.dart';
 import 'package:gradal/main_screens/home_screen.dart';
 import 'package:gradal/main_screens/profile.dart';
 import 'package:gradal/main_screens/stores.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
+
+import '../providers/cart_provider.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({super.key});
@@ -35,12 +40,28 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
         selectedItemColor: Colors.black,
         //unselectedItemColor: Colors.red,
         currentIndex: _selectedIndex,
-        items: const [
+        items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Category'),
           BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Stores'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: 'Cart'),
+            icon: badges.Badge(
+              showBadge: context.read<Cart>()
+              .getItems.isEmpty ? false : true,
+              badgeStyle: badges.BadgeStyle(
+                badgeColor: Colors.yellow,
+                padding: EdgeInsets.all(4),
+              ),
+              badgeContent: Text(
+                context.watch<Cart>().getItems.length.toString(),
+                style: TextStyle(fontSize: 16,
+                    fontWeight: FontWeight.w400),
+              ),
+        child: Icon(Icons.shopping_cart),
+      ),
+              //Icon(Icons.shopping_cart),
+              label: 'Cart',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
