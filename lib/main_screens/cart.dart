@@ -31,34 +31,33 @@ class _CartScreenState extends State<CartScreen> {
             title: AppBarTitle(title: 'Cart'),
             centerTitle: true,
             actions: [
-              context.watch<Cart>().getItems.isEmpty ?
-                  const SizedBox() :
-              IconButton(
-                onPressed: () {
-                  MyAlertDialog.showMyDialog(
-                      context: context,
-                      title: 'Warning',
-                      content: 'Are you sure you want to clear the cart ?',
-                      tabNo: () {
-                        Navigator.pop(context);
+              context.watch<Cart>().getItems.isEmpty
+                  ? const SizedBox()
+                  : IconButton(
+                      onPressed: () {
+                        MyAlertDialog.showMyDialog(
+                            context: context,
+                            title: 'Warning',
+                            content:
+                                'Are you sure you want to clear the cart ?',
+                            tabNo: () {
+                              Navigator.pop(context);
+                            },
+                            tabYes: () {
+                              context.read<Cart>().clearCart();
+                              Navigator.pop(context);
+                            });
                       },
-                      tabYes: () {
-                        context.read<Cart>().clearCart();
-                        Navigator.pop(context);
-                      }
-                  );
-
-                },
-                icon: Icon(
-                  Icons.delete_forever,
-                  color: Colors.black,
-                ),
-              ),
+                      icon: Icon(
+                        Icons.delete_forever,
+                        color: Colors.black,
+                      ),
+                    ),
             ],
           ),
-          body: context.watch<Cart>().getItems.isNotEmpty ?
-          CartItems() :
-          EmptyCart(),
+          body: context.watch<Cart>().getItems.isNotEmpty
+              ? CartItems()
+              : EmptyCart(),
           bottomSheet: Padding(
             padding: EdgeInsets.all(24),
             child: Row(
@@ -89,10 +88,14 @@ class _CartScreenState extends State<CartScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: MaterialButton(
-                    onPressed: total == 0.0 ? null : () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)
-                      => PlaceOrderScreen()));
-                    },
+                    onPressed: total == 0.0
+                        ? null
+                        : () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PlaceOrderScreen()));
+                          },
                     child: const Text('CHECK OUT'),
                   ),
                 ),
@@ -123,10 +126,7 @@ class EmptyCart extends StatelessWidget {
         children: [
           Text(
             'Ops! Your Cart Is Empty!',
-            style: TextStyle(
-              fontSize: 30.0,
-              fontStyle: FontStyle.italic
-            ),
+            style: TextStyle(fontSize: 30.0, fontStyle: FontStyle.italic),
           ),
           SizedBox(
             height: 50,
@@ -137,8 +137,9 @@ class EmptyCart extends StatelessWidget {
             child: MaterialButton(
               minWidth: MediaQuery.of(context).size.width * 0.6,
               onPressed: () {
-                Navigator.canPop(context) ? Navigator.pop(context) :
-                Navigator.pushReplacementNamed(context, '/customer_home');
+                Navigator.canPop(context)
+                    ? Navigator.pop(context)
+                    : Navigator.pushReplacementNamed(context, '/customer_home');
               },
               child: Text(
                 'Continue shopping',
@@ -165,11 +166,13 @@ class CartItems extends StatelessWidget {
           itemCount: cart.count,
           itemBuilder: (context, index) {
             final product = cart.getItems[index];
-            return CartItemModal(product: product, cart: context.read<Cart>(),);
+            return CartItemModal(
+              product: product,
+              cart: context.read<Cart>(),
+            );
           },
         );
       },
     );
   }
 }
-

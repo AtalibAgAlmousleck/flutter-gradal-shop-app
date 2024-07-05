@@ -13,6 +13,7 @@ import '../widgets/alert-dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.documentId});
+
   final String documentId;
 
   @override
@@ -22,6 +23,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
@@ -95,10 +97,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 25.0),
                                   child: Text(
-                                    data['name'].toUpperCase(),
+                                    data['name'],//.toUpperCase(),
                                     style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
                                 ),
@@ -243,19 +245,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 child: Column(
                                   children: [
-                                    RepetedListTitle(
+                                    RepeatedListTitle(
                                       title: 'Email address',
                                       subTitle: data['email'].toString(),
                                       icon: Icons.email,
                                     ),
                                     YellowDivider(),
-                                    RepetedListTitle(
+                                    RepeatedListTitle(
                                       title: 'Phone No.',
                                       subTitle: data['phone'].toString(),
                                       icon: Icons.phone,
                                     ),
                                     YellowDivider(),
-                                    RepetedListTitle(
+                                    RepeatedListTitle(
                                       title: 'Address',
                                       subTitle: data['address'].toString(),
                                       icon: Icons.location_pin,
@@ -276,19 +278,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 child: Column(
                                   children: [
-                                    RepetedListTitle(
+                                    RepeatedListTitle(
                                       title: 'Edit Profile',
                                       icon: Icons.edit,
                                       onPressed: () {},
                                     ),
                                     YellowDivider(),
-                                    RepetedListTitle(
+                                    RepeatedListTitle(
                                       title: 'Change Password',
                                       icon: Icons.lock,
                                       onPressed: () {},
                                     ),
                                     YellowDivider(),
-                                    RepetedListTitle(
+                                    RepeatedListTitle(
                                       title: 'Logout',
                                       icon: Icons.logout,
                                       onPressed: () async {
@@ -350,8 +352,8 @@ class YellowDivider extends StatelessWidget {
   }
 }
 
-class RepetedListTitle extends StatelessWidget {
-  const RepetedListTitle({
+class RepeatedListTitle extends StatelessWidget {
+  const RepeatedListTitle({
     super.key,
     required this.title,
     this.subTitle = '',
