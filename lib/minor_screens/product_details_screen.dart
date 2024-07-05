@@ -12,6 +12,7 @@ import 'package:gradal/widgets/snack_bar.dart';
 import 'package:gradal/widgets/yellow_button.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
+import 'package:badges/badges.dart' as badges;
 
 import '../models/products_model.dart';
 
@@ -24,16 +25,6 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  late var existingItemWishList =
-  context.read<WishList>()
-      .getWishList.firstWhereOrNull((product) =>
-  product.documentId == widget.prodList['proid']);
-
-  late var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull(
-          (product) =>
-      product.documentId == widget.prodList['proid']
-  );
-
   late final Stream<QuerySnapshot> _productsStream = FirebaseFirestore
       .instance.collection('products')
       .where('maincateg', isEqualTo: widget.prodList['maincateg'])
@@ -45,6 +36,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var existingItemCart = context.read<Cart>().getItems.firstWhereOrNull(
+            (product) =>
+        product.documentId == widget.prodList['proid']
+    );
     return Material(
       child: SafeArea(
         child: ScaffoldMessenger(
@@ -134,6 +129,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                             IconButton(
                               onPressed:() {
+                                var existingItemWishList =
+                                context.read<WishList>()
+                                    .getWishList.firstWhereOrNull((product) =>
+                                product.documentId == widget.prodList['proid']);
                                 existingItemWishList
                                     != null ?
                                 context.read<WishList>()
@@ -258,12 +257,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           => CartScreen(back: const AppBarBackButton(),
                           ),),);
                         },
-                        icon: Icon(Icons.shopping_cart),
+                        //todo: fix the badge shopping cart
+                        icon: badges.Badge(
+                          showBadge: context.read<Cart>()
+                          .getItems.isEmpty ? false : true,
+                          badgeStyle: badges.BadgeStyle(
+                            badgeColor: Colors.yellow,
+                            padding: EdgeInsets.all(4),
+                          ),
+                          badgeContent: Text(
+                            context.watch<Cart>().getItems.length.toString(),
+                            style: TextStyle(fontSize: 16,
+                            fontWeight: FontWeight.w400),
+                          ),
+                          child: Icon(Icons.shopping_cart),
+                        ),
                       ),
                     ],
                   ),
                   YellowButton(
-                      label: 'ADD TO CART',
+                      label:
+                       existingItemCart != null ? 'added to cart' : 'ADD TO CART',
                       onPressed: () {
                         // fetch products by id: check if the item added in the cart
                         existingItemCart != null ? MyMessageHandler.showSnackBar(
