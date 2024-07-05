@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gradal/categories/women_category.dart';
 import 'package:gradal/galleries/beauty_gallery.dart';
 import 'package:gradal/galleries/kids_gallery.dart';
 import 'package:gradal/galleries/men_gallery.dart';

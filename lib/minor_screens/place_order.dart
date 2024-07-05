@@ -110,7 +110,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                           children: [
                                             Text(order.name, maxLines: 2, overflow: TextOverflow.ellipsis,
                                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600,
-                                            color: Colors.grey.shade600),),
+                                            color: Colors.grey.shade600),
+                                            ),
                                             Padding(
                                               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
                                               child: Row(

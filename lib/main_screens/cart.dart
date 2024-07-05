@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradal/providers/cart_provider.dart';
 import 'package:gradal/widgets/alert-dialog.dart';
@@ -7,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import '../minor_screens/place_order.dart';
 import '../models/cart_item_modal.dart';
-import '../widgets/yellow_button.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key, this.back});

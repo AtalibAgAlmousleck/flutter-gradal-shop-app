@@ -63,8 +63,10 @@ class DashboardScreen extends StatelessWidget {
                 tabYes: () async {
                   await FirebaseAuth.instance
                       .signOut();
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                   Navigator.pushReplacementNamed(
+                      // ignore: use_build_context_synchronously
                       context, '/welcome_screen');
                 },
               );

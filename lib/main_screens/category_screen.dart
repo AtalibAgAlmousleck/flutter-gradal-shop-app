@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gradal/categories/accessories_category.dart';
-import 'package:gradal/categories/bags_category.dart';
 import 'package:gradal/categories/beauty_category.dart';
-import 'package:gradal/categories/electronics_category.dart';
-import 'package:gradal/categories/garden_category.dart';
 import 'package:gradal/categories/kids_categrory.dart';
 import 'package:gradal/categories/men_category.dart';
 import 'package:gradal/categories/shoes_category.dart';

@@ -7,7 +7,6 @@ import 'package:gradal/main_screens/profile.dart';
 import 'package:gradal/main_screens/stores.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 import '../providers/cart_provider.dart';
 

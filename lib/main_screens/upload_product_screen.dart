@@ -380,6 +380,7 @@ import 'package:gradal/widgets/snack_bar.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
 
@@ -418,7 +419,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         imageQuality: 95,
       );
       setState(() {
-        imageFileList = pickedImages!;
+        imageFileList = pickedImages; //!
       });
     } catch (e) {
       setState(() {
@@ -564,7 +565,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         _formKey.currentState!.reset();
       });
     } else {
-      print('no images uploaded');
+      // print('no images uploaded');
     }
   }
 
@@ -789,11 +790,12 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
               child: FloatingActionButton(
                 onPressed: processing == true ? null : uploadProduct,
                 backgroundColor: Colors.yellow,
-                child: processing == true ?
-                const CircularProgressIndicator() : Icon(
-                  Icons.upload,
-                  color: Colors.black,
-                ),
+                child: processing == true
+                    ? const CircularProgressIndicator()
+                    : Icon(
+                        Icons.upload,
+                        color: Colors.black,
+                      ),
               ),
             ),
           ],
