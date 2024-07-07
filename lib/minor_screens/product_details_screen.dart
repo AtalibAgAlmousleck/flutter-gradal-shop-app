@@ -169,7 +169,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ],
                     ),
                   ),
-                  Text(
+                  widget.prodList['instock'] == 0
+                  ? Text('Ops! this item is out of stock',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),) : Text(
                     (widget.prodList['instock'].toString()) + (' pieces available in stock'),
                     style: TextStyle(
                       fontSize: 16,
@@ -279,20 +285,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       label:
                        existingItemCart != null ? 'added to cart' : 'ADD TO CART',
                       onPressed: () {
+                        if(widget.prodList['instock'] == 0) {
+                          MyMessageHandler.showSnackBar(
+                              _scaffoldKey, 'Ops! this item is out of stock'
+                          );
+                        } else if( existingItemCart != null) {
+                          MyMessageHandler.showSnackBar(
+                              _scaffoldKey, 'Item already added to cart'
+                          );
+                        } else {
+                          context.read<Cart>()
+                              .addItem(
+                              widget.prodList['proname'],
+                              widget.prodList['price'],
+                              1,
+                              widget.prodList['instock'],
+                              widget.prodList['proimages'],
+                              widget.prodList['proid'],
+                              widget.prodList['sid']
+                          );
+                        }
                         // fetch products by id: check if the item added in the cart
-                        existingItemCart != null ? MyMessageHandler.showSnackBar(
-                            _scaffoldKey, 'Item already added to cart'
-                        ) :
-                        context.read<Cart>()
-                            .addItem(
-                            widget.prodList['proname'],
-                            widget.prodList['price'],
-                            1,
-                            widget.prodList['instock'],
-                            widget.prodList['proimages'],
-                            widget.prodList['proid'],
-                            widget.prodList['sid']
-                        );
+                        // MyMessageHandler.showSnackBar(
+                        //     _scaffoldKey, 'Item already added to cart'
+                        // ) :
+
                       }
                       , width: 0.5
                   ),
