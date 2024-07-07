@@ -6,6 +6,7 @@ import 'package:gradal/providers/cart_provider.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 import 'package:gradal/widgets/yellow_button.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({super.key});
@@ -16,6 +17,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   int selectedValue = 1;
+  late String orderId;
   CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
 
@@ -213,6 +215,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       ],
                     ),
                   ),
+                  //todo button here
                   bottomSheet: Container(
                     color: Colors.grey.shade400,
                     child: Padding(
@@ -227,10 +230,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               builder: (context) => SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * 0.3,
+                                width: double.infinity,
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 100),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: <Widget>[
                                       Text(
                                         'Pay At Home ${totalPrice.toStringAsFixed(2)} \$',
@@ -239,7 +244,68 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       YellowButton(
                                         label:
                                             'Confirm ${totalPaid.toStringAsFixed(2)}',
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          for (var item in context
+                                              .read<Cart>()
+                                              .getItems) {
+                                            CollectionReference orderReference =
+                                                FirebaseFirestore.instance
+                                                    .collection('orders');
+                                            orderId = Uuid().v4();
+                                            await orderReference
+                                                .doc(orderId)
+                                                .set({
+                                              //customer
+                                              'cid': data['cid'],
+                                              'custname': data['name'],
+                                              'email': data['email'],
+                                              'address': data['address'],
+                                              'phone': data['phone'],
+                                              'profilemage':
+                                                  data['profileimage'],
+
+                                              //supplier
+                                              'sid': item.suppId,
+
+                                              // products
+                                              'proid': item.documentId,
+                                              'orderid': orderId,
+                                              'orderimage':
+                                                  item.imagesUrl.first,
+                                              'orderqty': item.quantity,
+                                              'orderprice':
+                                                  item.quantity * item.price,
+
+                                              // delivery status
+                                              'deliverystatus': 'preparing',
+                                              'deliverydate': '',
+                                              'orderdate': DateTime.now(),
+                                              'paymentstatus':
+                                                  'cash on delivery',
+                                              'orderreview': false,
+                                            }).whenComplete(() async {
+                                              await FirebaseFirestore.instance
+                                                  .runTransaction(
+                                                      (transaction) async {
+                                                DocumentReference documentRef =
+                                                    FirebaseFirestore.instance
+                                                        .collection('products')
+                                                        .doc(item.documentId);
+                                                DocumentSnapshot snapshot2 =
+                                                    await transaction
+                                                        .get(documentRef);
+                                                transaction.update(
+                                                    documentRef, {
+                                                  'instock':
+                                                      snapshot2['instock'] -
+                                                          item.quantity
+                                                });
+                                              });
+                                            });
+                                          }
+                                          context.read<Cart>().clearCart();
+                                          Navigator.popUntil(context, ModalRoute.withName('/customer_home'));
+                                        },
                                         width: 0.9,
                                       ),
                                     ],
