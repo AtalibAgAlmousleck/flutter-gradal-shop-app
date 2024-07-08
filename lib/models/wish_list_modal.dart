@@ -68,16 +68,11 @@ class WishListModal extends StatelessWidget {
                                       (element) =>
                                   element.documentId ==
                                       product.documentId
-                              ) != null ? SizedBox() : IconButton(
+                              ) != null || product.quantity == 0 ? SizedBox() : IconButton(
                                 onPressed: () {
-                                  // context.read<Cart>().getItems.firstWhereOrNull(
-                                  //         (element) =>
-                                  //     element.documentId ==
-                                  //         product.documentId
-                                  // ) != null ? print('in cart') :
-
                                   context.read<Cart>()
                                       .addItem(
+
                                       product.name,
                                       product.price,
                                       1,
