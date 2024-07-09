@@ -12,10 +12,11 @@ class PreparingOder extends StatelessWidget {
       stream: FirebaseFirestore.instance
           .collection('orders')
           .where('sid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          //.where('deliverystate', isEqualTo: 'preparing') //preparing
+          .where('deliverystatus', isEqualTo: 'preparing') //preparing
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         //todo: if the data is waiting
+
         if (snapshot.hasError) {
           return Text('Something went wrong');
         }

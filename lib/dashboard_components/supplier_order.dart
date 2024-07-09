@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gradal/dashboard_components/delivered_order.dart';
 import 'package:gradal/dashboard_components/preparing_oder.dart';
 import 'package:gradal/dashboard_components/shipping_order.dart';
-import 'package:gradal/main_screens/dashboard.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
 class SupplierOrder extends StatelessWidget {

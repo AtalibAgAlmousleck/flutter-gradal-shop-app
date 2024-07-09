@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CustomerOrderModal extends StatelessWidget {
   const CustomerOrderModal({super.key, required this.order});
@@ -128,7 +129,9 @@ class CustomerOrderModal extends StatelessWidget {
                     ),
                     order['deliverystatus'] == 'shipping'
                         ? Text(
-                            ('Estimated Delivery: ') + (order['deliverydate']),
+                            ('Estimated Delivery: ') +
+                                (DateFormat('yyy-MM-dd').format(order['deliverydate']
+                                    .toDate())).toString(),
                             style: TextStyle(fontSize: 15),
                           )
                         : const Text(''),
