@@ -91,6 +91,7 @@ class _ProductModelState extends State<ProductModel> {
                                 ),
                                 Text(
                                   widget.products['price'].toStringAsFixed(2),
+
                                   //+ (' \$'),
                                   style: widget.products['discount'] != 0 ? TextStyle(
                                     color: Colors.grey,
@@ -194,7 +195,7 @@ class _ProductModelState extends State<ProductModel> {
                       ),
                       child: Center(
                         child: Text(
-                            'Save $onSale.toString()} %'),
+                            'Save ${onSale} %'),
                       ),
                     ),
                   )
