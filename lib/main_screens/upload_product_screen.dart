@@ -380,7 +380,6 @@ import 'package:gradal/widgets/snack_bar.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as path;
 import 'package:uuid/uuid.dart';
 
@@ -401,6 +400,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late String productName;
   late String productDescription;
   late String proId;
+  int ? discount = 0;
   String mainCategoryValue = 'select category';
   String subCategValue = 'subcategory';
   List<String> subCategList = [];
@@ -553,7 +553,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
         'prodesc': productDescription,
         'sid': FirebaseAuth.instance.currentUser!.uid,
         'proimages': imageUriList,
-        'discount': 0
+        'discount': discount,
       }).whenComplete(() {
         setState(() {
           processing = false;
@@ -638,32 +638,64 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
                           ),
                         ),
                       ),
+                      //todo: adding discount
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.45,
                           child: TextFormField(
+                            maxLength: 2,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter quantity';
-                              } else if (!value.isValidQuantity()) {
-                                return 'Enter a valid quantity';
+                                return null;
+                              } else if (value.isValidDiscount() != true) {
+                                return 'invalid discount';
                               }
                               return null;
+
                             },
                             onSaved: (value) {
-                              quantity = int.parse(value!);
+                              discount = int.parse(value!);
                             },
-                            keyboardType: TextInputType.number,
+                            keyboardType: TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             decoration: textFormDecoration.copyWith(
-                              labelText: 'Quantity',
-                              hintText: 'Enter Quantity',
+                              labelText: 'discount',
+                              hintText: 'discount .. %',
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
+
+                  //todo: product quantity
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter quantity';
+                          } else if (!value.isValidQuantity()) {
+                            return 'Enter a valid quantity';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          quantity = int.parse(value!);
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: textFormDecoration.copyWith(
+                          labelText: 'Quantity',
+                          hintText: 'Enter Quantity',
+                        ),
+                      ),
+                    ),
+                  ),
+                  //todo: end of product quantity
                   // Dropdowns below price and quantity
                   Row(
                     children: [
@@ -831,6 +863,13 @@ extension QuantityValidator on String {
 extension PriceValidator on String {
   bool isValidPrice() {
     return RegExp(r'^((([1-9][0-9]*[\.]*)||([0][\.]*))([0-9]{1,2}))$')
+        .hasMatch(this);
+  }
+}
+
+extension DiscountValidator on String {
+  bool isValidDiscount() {
+    return RegExp(r'^([0-9]*)$')
         .hasMatch(this);
   }
 }
