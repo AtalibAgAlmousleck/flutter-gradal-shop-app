@@ -7,9 +7,6 @@ import 'package:gradal/main_screens/home_screen.dart';
 import 'package:gradal/main_screens/stores.dart';
 import 'package:gradal/main_screens/upload_product_screen.dart';
 import 'package:badges/badges.dart' as badges;
-import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
-import '../providers/cart_provider.dart';
 
 class SupplierHomeScreen extends StatefulWidget {
   const SupplierHomeScreen({super.key});

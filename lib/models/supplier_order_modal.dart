@@ -204,9 +204,9 @@ class SupplierOrderModal extends StatelessWidget {
     }
   }
 
-  void _updateDeliveryStatus(BuildContext context, String orderId) async {
-    await FirebaseFirestore.instance.collection('orders').doc(orderId).update({
-      'deliverystatus': 'delivered',
-    });
-  }
+  // void _updateDeliveryStatus(BuildContext context, String orderId) async {
+  //   await FirebaseFirestore.instance.collection('orders').doc(orderId).update({
+  //     'deliverystatus': 'delivered',
+  //   });
+  // }
 }

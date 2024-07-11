@@ -19,7 +19,7 @@ class _VisitStoreState extends State<VisitStore> {
   @override
   Widget build(BuildContext context) {
     CollectionReference suppliers = FirebaseFirestore.instance.collection('suppliers');
-    final Stream<QuerySnapshot> _productsStream = FirebaseFirestore
+    final Stream<QuerySnapshot> productsStream = FirebaseFirestore
         .instance.collection('products')
         .where('sid', isEqualTo: widget.suppId)
         .snapshots();
@@ -138,7 +138,7 @@ class _VisitStoreState extends State<VisitStore> {
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<QuerySnapshot>(
-                stream: _productsStream,
+                stream: productsStream,
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     return Text('Something went wrong');

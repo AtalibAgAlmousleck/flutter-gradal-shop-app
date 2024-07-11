@@ -425,7 +425,6 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
       setState(() {
         _pickedImageError = e;
       });
-      print(_pickedImageError);
     }
   }
 
@@ -521,7 +520,7 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
               });
             }
           } catch (e) {
-            print(e);
+            print(e.hashCode);
           }
         } else {
           MyMessageHandler.showSnackBar(_scaffoldKey, 'Please pick images');

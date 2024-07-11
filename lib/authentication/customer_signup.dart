@@ -57,7 +57,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   }
 
   //! pick image with galary
-  void _pickImageGalary() async {
+  void _pickImageGallery() async {
     try {
       final pickedImage = await _picker.pickImage(
         source: ImageSource.gallery,
@@ -108,7 +108,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
           });
 
           //! navigate to customer home screen
-          Navigator.pushReplacementNamed(context, '/customer_login');
+          await Future.delayed(const Duration(microseconds: 100)).whenComplete(
+              () => Navigator.pushReplacementNamed(context, '/customer_login')
+          );
 
           ///customer_home
         } on FirebaseAuthException catch (e) {
@@ -221,7 +223,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                                   ),
                                   onPressed: () {
                                     //! galary image
-                                    _pickImageGalary();
+                                    _pickImageGallery();
                                   },
                                 ),
                               ),

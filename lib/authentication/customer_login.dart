@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +28,11 @@ class _CustomerLoginState extends State<CustomerLogin> {
       try {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
-
+        _formKey.currentState!.reset();
         //! navigate to customer home screen
-        Navigator.pushReplacementNamed(context, '/customer_home');
+        await Future.delayed(Duration(microseconds: 100)).whenComplete(
+            () => Navigator.pushReplacementNamed(context, '/customer_home')
+        );
       } on FirebaseAuthException catch (e) {
         setState(() {
           processing = false;
@@ -50,7 +51,6 @@ class _CustomerLoginState extends State<CustomerLogin> {
         setState(() {
           processing = false;
         });
-        print('Unexpected error: $e');
         MyMessageHandler.showSnackBar(_scaffoldKey,
             'An unexpected error occurred, please try again later.');
       }

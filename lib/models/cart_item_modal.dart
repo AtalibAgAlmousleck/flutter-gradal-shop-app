@@ -95,9 +95,11 @@ class CartItemModal extends StatelessWidget {
                                                   product.documentId,
                                                   product.suppId
                                               );
-                                              context.read<Cart>()
-                                                  .removeItem(product);
-                                              Navigator.pop(context);
+                                              await Future.delayed(Duration(microseconds: 100)).whenComplete(() {
+                                                context.read<Cart>()
+                                                    .removeItem(product);
+                                                Navigator.pop(context);
+                                              });
                                             },
                                             child: Text('Move to wishlist ?'),
                                           ),

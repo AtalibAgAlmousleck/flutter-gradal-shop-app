@@ -297,16 +297,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         MyAlertDialog.showMyDialog(
                                           context: context,
                                           title: 'Log Out',
-                                          content: 'Are you sure to log out ?',
+                                          content: 'Are you sure you want to log out ?',
                                           tabNo: () {
                                             Navigator.pop(context);
                                           },
                                           tabYes: () async {
                                             await FirebaseAuth.instance
                                                 .signOut();
-                                            Navigator.pop(context);
-                                            Navigator.pushReplacementNamed(
-                                                context, '/welcome_screen');
+                                            Future.delayed(Duration(microseconds: 100)).whenComplete(() {
+                                              Navigator.pop(context);
+                                              Navigator.pushReplacementNamed(
+                                                  context, '/welcome_screen');
+                                            });
+
                                           },
                                         );
                                       },

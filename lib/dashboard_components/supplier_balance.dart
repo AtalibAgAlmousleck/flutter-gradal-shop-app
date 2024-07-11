@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
-import 'package:gradal/widgets/yellow_button.dart';
 
 class SupplierBalance extends StatelessWidget {
   const SupplierBalance({super.key});

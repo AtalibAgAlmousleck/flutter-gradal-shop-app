@@ -313,8 +313,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               });
                                             });
                                           }
+                                          await Future.delayed(Duration(microseconds: 100))
+                                          .whenComplete(() {
                                           context.read<Cart>().clearCart();
-                                          Navigator.popUntil(context, ModalRoute.withName('/customer_home'));
+                                              Navigator.popUntil(context, ModalRoute.withName('/customer_home'));
+                                          });
                                         },
                                         width: 0.9,
                                       ),
@@ -324,9 +327,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ),
                             );
                           } else if (selectedValue == 2) {
-                            print('Pay via Master');
                           } else if (selectedValue == 3) {
-                            print('Pay via Paypal');
                           }
                         },
                       ),

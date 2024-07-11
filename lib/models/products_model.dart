@@ -195,7 +195,7 @@ class _ProductModelState extends State<ProductModel> {
                       ),
                       child: Center(
                         child: Text(
-                            'Save ${onSale} %'),
+                            'Save $onSale %'),
                       ),
                     ),
                   )
