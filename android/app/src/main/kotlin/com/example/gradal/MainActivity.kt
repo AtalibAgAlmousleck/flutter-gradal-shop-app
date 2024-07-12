@@ -1,6 +1,5 @@
 package com.example.gradal
 
-import io.flutter.embedding.android.FlutterActivity
-
-class MainActivity: FlutterActivity() {
+import io.flutter.embedding.android.FlutterFragmentActivity //FlutterActivity
+class MainActivity: FlutterFragmentActivity() {
 }
