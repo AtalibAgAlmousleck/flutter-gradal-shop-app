@@ -453,21 +453,6 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     );
   }
 
-  // Widget previewImages() {
-  //   return InkWell(
-  //     onLongPress: () {
-  //       setState(() {
-  //         imageFileList = [];
-  //       });
-  //     },
-  //     child: ListView.builder(
-  //         itemCount: imageFileList!.length,
-  //         itemBuilder: (context, index) {
-  //           return Image.file(File(imageFileList![index].path));
-  //         }),
-  //   );
-  // }
-
   void selectedCategory(String? value) {
     if (value == 'select category') {
       subCategList = [];
@@ -476,23 +461,11 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     } else if (value == 'women') {
       subCategList = women;
     }
-    // else if (value == 'electronics') {
-    //   subCategList = electronics;
-    // } else if (value == 'accessories') {
-    //   subCategList = accessories;
-    // } else if (value == 'shoes') {
-    //   subCategList = shoes;
-    // } else if (value == 'home & garden') {
-    //   subCategList = homeandgarden;
-    // }
     else if (value == 'beauty') {
       subCategList = beauty;
     } else if (value == 'kids') {
       subCategList = kids;
     }
-    // else if (value == 'bags') {
-    //   subCategList = bags;
-    // }
     setState(() {
       mainCategoryValue = value!;
       subCategValue = 'subcategory';

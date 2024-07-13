@@ -103,6 +103,7 @@ class _SupplierSignupState extends State<SupplierSignup> {
             'email': email,
             'storelogo': storeLogo, //storeLogo,
             'phone': '',
+            'coverimage': '',
             //'address': '',
             'sid': _uid,
           });
