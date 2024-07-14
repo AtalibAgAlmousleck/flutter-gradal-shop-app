@@ -4,11 +4,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gradal/customer_screens/address_list.dart';
 import 'package:gradal/customer_screens/customer_order.dart';
 import 'package:gradal/customer_screens/wish_list.dart';
 import 'package:gradal/main_screens/cart.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
+import '../customer_screens/add_address.dart';
 import '../widgets/alert-dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -97,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 25.0),
                                   child: Text(
-                                    data['name'],//.toUpperCase(),
+                                    data['name'], //.toUpperCase(),
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.normal,
@@ -246,21 +248,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 child: Column(
                                   children: [
                                     RepeatedListTitle(
-                                      title: 'Email address',
-                                      subTitle: data['email'].toString(),
+                                      title: 'Email address: ',
                                       icon: Icons.email,
+                                      subTitle: data['email'].toString() == ''
+                                          ? 'example@gmail.com'
+                                          : data['email'],
                                     ),
                                     YellowDivider(),
                                     RepeatedListTitle(
-                                      title: 'Phone No.',
-                                      subTitle: data['phone'].toString(),
+                                      title: 'Phone number: ',
                                       icon: Icons.phone,
+                                      subTitle: data['phone'].toString() == ''
+                                          ? 'example: 120 52 55 44'
+                                          : data['phone'],
                                     ),
                                     YellowDivider(),
                                     RepeatedListTitle(
-                                      title: 'Address',
-                                      subTitle: data['address'].toString(),
+                                      onPressed: FirebaseAuth
+                                              .instance.currentUser!.isAnonymous
+                                          ? null
+                                          : () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AddressList(),
+                                                ),
+                                              );
+                                            },
+                                      title: 'Address: ',
                                       icon: Icons.location_pin,
+                                      subTitle: userAddress(data),
+                                      // data['address'].toString() == '' ?
+                                      // 'example: Mali - Bamako' : data['address'],
                                     ),
                                   ],
                                 ),
@@ -297,19 +317,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         MyAlertDialog.showMyDialog(
                                           context: context,
                                           title: 'Log Out',
-                                          content: 'Are you sure you want to log out ?',
+                                          content:
+                                              'Are you sure you want to log out ?',
                                           tabNo: () {
                                             Navigator.pop(context);
                                           },
                                           tabYes: () async {
                                             await FirebaseAuth.instance
                                                 .signOut();
-                                            Future.delayed(Duration(microseconds: 100)).whenComplete(() {
+                                            Future.delayed(
+                                                    Duration(microseconds: 100))
+                                                .whenComplete(() {
                                               Navigator.pop(context);
                                               Navigator.pushReplacementNamed(
                                                   context, '/welcome_screen');
                                             });
-
                                           },
                                         );
                                       },
@@ -338,6 +360,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
       },
     );
+  }
+
+  String userAddress(dynamic data) {
+    if (FirebaseAuth.instance.currentUser!.isAnonymous == true) {
+      return 'example: Bamako - Mali';
+    } else if (FirebaseAuth.instance.currentUser!.isAnonymous == false &&
+        data['address'] == '') {
+      return "Please Set Your Address";
+    }
+    return data['address'];
   }
 }
 

@@ -18,12 +18,12 @@ class YellowButton extends StatelessWidget {
       height: 40,
       width: MediaQuery.of(context).size.width * width,
       decoration: BoxDecoration(
-        color: Colors.yellow,
+        color: Colors.blueGrey,
         borderRadius: BorderRadius.circular(25),
       ),
       child: MaterialButton(
         onPressed: onPressed,
-        child: Text(label),
+        child: Text(label, style: TextStyle(color: Colors.white),),
       ),
     );
   }
