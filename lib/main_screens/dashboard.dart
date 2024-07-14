@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gradal/dashboard_components/edit_business.dart';
+import 'package:gradal/dashboard_components/manage_employees.dart';
 import 'package:gradal/dashboard_components/manage_product.dart';
 import 'package:gradal/dashboard_components/supplier_balance.dart';
 import 'package:gradal/dashboard_components/supplier_order.dart';
@@ -14,18 +15,20 @@ List<String> labels = [
   'my store',
   'orders',
   'profile',
-  'products',
+  'employees',
   'balance',
   'statics',
+  'Employees'
 ];
 
 List<IconData> icons = [
   Icons.store,
   Icons.shop_2_outlined,
   Icons.edit,
-  Icons.settings,
+  Icons.personal_video_outlined,
   Icons.attach_money,
   Icons.show_chart,
+  //Icons.person
 ];
 
 List<Widget> pages = [
@@ -35,7 +38,8 @@ List<Widget> pages = [
   EditBusiness(),
   ManageProduct(),
   SupplierBalance(),
-  SupplierStatic()
+  SupplierStatic(),
+  //ManageEmployees(),
 ];
 
 class DashboardScreen extends StatelessWidget {
@@ -99,7 +103,7 @@ class DashboardScreen extends StatelessWidget {
                   shadowColor: Colors.purpleAccent.shade200,
                   color: Colors.blueGrey.withOpacity(0.7),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Icon(
                         icons[index],

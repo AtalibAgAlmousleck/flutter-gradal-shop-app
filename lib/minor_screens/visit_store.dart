@@ -206,7 +206,7 @@ class _VisitStoreState extends State<VisitStore> {
                         return StaggeredGridTile.fit(
                           crossAxisCellCount: 1,
                           child: ProductModel(
-                            doc: doc,
+                            //products: doc,
                             products: snapshot.data!.docs[index],
                           ),
                         );

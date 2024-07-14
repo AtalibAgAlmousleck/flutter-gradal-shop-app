@@ -67,7 +67,7 @@ class _SubCategoryProductState extends State<SubCategoryProduct> {
                 return StaggeredGridTile.fit(
                   crossAxisCellCount: 1,
                   child: ProductModel(
-                    doc: doc,
+                   // doc: doc,
                     products: snapshot.data!.docs[index],
                   ),
                 );

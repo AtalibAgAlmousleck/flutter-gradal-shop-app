@@ -8,6 +8,7 @@ import 'package:gradal/main_screens/supplier_home.dart';
 import 'package:gradal/main_screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gradal/providers/cart_provider.dart';
+import 'package:gradal/providers/employee_provider.dart';
 import 'package:gradal/providers/strip_id.dart';
 import 'package:gradal/providers/wish_list_provider.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ void main() async {
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => Cart()),
       ChangeNotifierProvider(create: (_) => WishList()),
+      ChangeNotifierProvider(create: (_) => EmployeeProvider()),
     ], child: MyApp()),
   );
 }

@@ -51,7 +51,7 @@ class _WomenGalleryScreenState extends State<WomenGalleryScreen> {
               return StaggeredGridTile.fit(
                 crossAxisCellCount: 1,
                 child: ProductModel(
-                  doc: doc,
+                  //doc: doc,
                   products: snapshot.data!.docs[index],
                 ),
               );

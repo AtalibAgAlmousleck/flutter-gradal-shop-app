@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gradal/main_screens/category_screen.dart';
 import 'package:gradal/minor_screens/product_details_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
-
+import '../minor_screens/edit_product.dart';
+import '../minor_screens/edit_store.dart';
 import '../providers/wish_list_provider.dart';
 
 class ProductModel extends StatefulWidget {
@@ -12,11 +14,11 @@ class ProductModel extends StatefulWidget {
 
   const ProductModel({
     super.key,
-    required this.doc,
+    //required this.doc,
     required this.products,
   });
 
-  final QueryDocumentSnapshot<Object?> doc;
+  //final QueryDocumentSnapshot<Object?> doc;
 
   @override
   State<ProductModel> createState() => _ProductModelState();
@@ -57,7 +59,7 @@ class _ProductModelState extends State<ProductModel> {
                       constraints:
                           BoxConstraints(minHeight: 100, maxHeight: 250),
                       child: Image(
-                        image: NetworkImage(widget.doc['proimages'][0]),
+                        image: NetworkImage(widget.products['proimages'][0]),
                       ),
                     ),
                   ),
@@ -91,38 +93,43 @@ class _ProductModelState extends State<ProductModel> {
                                 ),
                                 Text(
                                   widget.products['price'].toStringAsFixed(2),
-
-                                  //+ (' \$'),
-                                  style: widget.products['discount'] != 0 ? TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 11,
-                                    decoration: TextDecoration.lineThrough,
-
-                                    fontWeight: FontWeight.w600,
-                                  ) : TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  style: widget.products['discount'] != 0
+                                      ? TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 11,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                          fontWeight: FontWeight.w600,
+                                        )
+                                      : TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                 ),
                                 SizedBox(width: 6),
-                                onSale != 0 ?  Text(
-                                  //widget.products['price'].toStringAsFixed(2),
-                                  //+ (' \$'),
-                                  ((1 - (onSale / 100)) *
-                                  widget.products['price']).toStringAsFixed(2),
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ) : Text(''),
+                                onSale != 0
+                                    ? Text(
+                                        //widget.products['price'].toStringAsFixed(2),
+                                        //+ (' \$'),
+                                        ((1 - (onSale / 100)) *
+                                                widget.products['price'])
+                                            .toStringAsFixed(2),
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      )
+                                    : Text(''),
                               ],
                             ),
                             widget.products['sid'] ==
                                     FirebaseAuth.instance.currentUser!.uid
                                 ? IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+
+                                    },
                                     icon: Icon(
                                       Icons.edit,
                                       color: Colors.red,
@@ -142,23 +149,31 @@ class _ProductModelState extends State<ProductModel> {
                                           : context
                                               .read<WishList>()
                                               .addWishItem(
-                                                  widget.products['proname'],
-                                                  //widget.products['price'],
-                                          onSale != 0 ? ((1 - (widget.products['discount'] / 100)) *
-                                              widget.products['price']) :
-                                          widget.products['price'],
-                                                  1,
-                                                  widget.products['instock'],
-                                                  widget.products['proimages'],
-                                                  widget.products['proid'],
-                                                  widget.products['sid']);
+                                                widget.products['proname'],
+                                                //widget.products['price'],
+                                                onSale != 0
+                                                    ? ((1 -
+                                                            (widget.products[
+                                                                    'discount'] /
+                                                                100)) *
+                                                        widget
+                                                            .products['price'])
+                                                    : widget.products['price'],
+                                                1,
+                                                widget.products['instock'],
+                                                widget.products['proimages'],
+                                                widget.products['proid'],
+                                                widget.products['sid'],
+                                              );
                                     },
                                     icon: context
                                                 .watch<WishList>()
                                                 .getWishList
-                                                .firstWhereOrNull((product) =>
-                                                    product.documentId ==
-                                                    widget.products['proid']) !=
+                                                .firstWhereOrNull(
+                                                  (product) =>
+                                                      product.documentId ==
+                                                      widget.products['proid'],
+                                                ) !=
                                             null
                                         ? Icon(
                                             Icons.favorite,
@@ -194,8 +209,7 @@ class _ProductModelState extends State<ProductModel> {
                         ),
                       ),
                       child: Center(
-                        child: Text(
-                            'Save $onSale %'),
+                        child: Text('Save $onSale %'),
                       ),
                     ),
                   )
