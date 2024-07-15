@@ -15,7 +15,16 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentScreen extends StatefulWidget {
-  const PaymentScreen({super.key});
+  const PaymentScreen({
+    super.key,
+    required this.name,
+    required this.phone,
+    required this.address,
+  });
+
+  final String name;
+  final String phone;
+  final String address;
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -272,10 +281,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                 .set({
                                               //customer
                                               'cid': data['cid'],
-                                              'custname': data['name'],
+                                              'custname': widget.name,
                                               'email': data['email'],
-                                              'address': data['address'],
-                                              'phone': data['phone'],
+                                              'address': widget.address,
+                                              'phone': widget.phone,
                                               'profilemage':
                                                   data['profileimage'],
 
@@ -445,37 +454,37 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
       );
       await displayPaymentSheet();
-    }catch(e) {
+    } catch (e) {
       print(e);
     }
   }
 
   createPaymentInitNet() async {
-   try {
-     Map<String, dynamic> body = {
-       'amount': '1200',
-       'currency': 'USD',
-       'payment_method_types[]': 'card'
-     };
+    try {
+      Map<String, dynamic> body = {
+        'amount': '1200',
+        'currency': 'USD',
+        'payment_method_types[]': 'card'
+      };
 
-     final response = await http.post(
-         Uri.parse('https://api.stripe.com/v1/payment_intents'),
-         body: body,
-         headers: {
-           'Authorization': 'Bearer $stripeSecretKey',
-           'content_type': 'application/x-www-form-urlencoded'
-         });
-     return jsonDecode(response.body);
-   } catch(e) {
-     print(e);
-   }
+      final response = await http.post(
+          Uri.parse('https://api.stripe.com/v1/payment_intents'),
+          body: body,
+          headers: {
+            'Authorization': 'Bearer $stripeSecretKey',
+            'content_type': 'application/x-www-form-urlencoded'
+          });
+      return jsonDecode(response.body);
+    } catch (e) {
+      print(e);
+    }
   }
 
   displayPaymentSheet() async {
-   try{
-     await Stripe.instance.presentPaymentSheet();
-   }catch(e) {
-     print(e);
-   }
+    try {
+      await Stripe.instance.presentPaymentSheet();
+    } catch (e) {
+      print(e);
+    }
   }
 }
