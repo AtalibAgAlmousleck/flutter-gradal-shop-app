@@ -92,6 +92,7 @@ class _VisitStoreState extends State<VisitStore> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                 data['storename'].toUpperCase(),
+                                //FirebaseAuth.instance.currentUser!.displayName!,
                                 style: TextStyle(
                                   color: Colors.yellow,
                                   fontStyle: FontStyle.italic,
