@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gradal/providers/auth_repo.dart';
 import 'package:gradal/widgets/yellow_button.dart';
 
 import '../widgets/auth_widget.dart';
@@ -29,12 +30,11 @@ class _SupplierLoginState extends State<SupplierLogin> {
     });
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseAuth.instance
-            .signInWithEmailAndPassword(email: email, password: password);
+        await AuthRepo.singInWithEmailAndPassword(email, password);
 
-        await FirebaseAuth.instance.currentUser!.reload();
-        if (FirebaseAuth.instance.currentUser!.emailVerified) {
-          //! navigate to customer home screen
+        await AuthRepo.reloadUserData();
+        if (await AuthRepo.checkEmailVerification()) {
+          _formKey.currentState!.reset();
           await Future.delayed(Duration(microseconds: 100)).whenComplete(() {
             Navigator.pushReplacementNamed(context, '/supplier_home');
           });
@@ -45,30 +45,14 @@ class _SupplierLoginState extends State<SupplierLogin> {
           );
           setState(() {
             processing = false;
-            reSendEmail = true;
+            //reSendEmail = true;
           });
         }
       } on FirebaseAuthException catch (e) {
         setState(() {
           processing = false;
         });
-        if (e.code == 'user-not-found') {
-          MyMessageHandler.showSnackBar(
-              _scaffoldKey, 'No user found with that email.');
-        } else if (e.code == 'wrong-password') {
-          MyMessageHandler.showSnackBar(
-              _scaffoldKey, 'Username or password is incorrect.');
-        } else {
-          MyMessageHandler.showSnackBar(
-              _scaffoldKey, 'Username or password is incorrect.');
-        }
-      } catch (e) {
-        setState(() {
-          processing = false;
-        });
-        print('Unexpected error: $e');
-        MyMessageHandler.showSnackBar(_scaffoldKey,
-            'An unexpected error occurred, please try again later.');
+        MyMessageHandler.showSnackBar(_scaffoldKey, e.message.toString());
       }
     } else {
       setState(() {
@@ -108,9 +92,13 @@ class _SupplierLoginState extends State<SupplierLogin> {
                                 label: 'Resend',
                                 onPressed: () async {
                                   try {
-                                    await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-                                  }catch(e) {print(e);}
-                                  Future.delayed(Duration(seconds: 3)).whenComplete(() {
+                                    await FirebaseAuth.instance.currentUser!
+                                        .sendEmailVerification();
+                                  } catch (e) {
+                                    print(e);
+                                  }
+                                  Future.delayed(Duration(seconds: 3))
+                                      .whenComplete(() {
                                     setState(() {
                                       reSendEmail = false;
                                     });

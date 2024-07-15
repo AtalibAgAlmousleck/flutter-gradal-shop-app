@@ -7,6 +7,7 @@ import 'package:gradal/dashboard_components/supplier_balance.dart';
 import 'package:gradal/dashboard_components/supplier_order.dart';
 import 'package:gradal/dashboard_components/supplier_static.dart';
 import 'package:gradal/minor_screens/visit_store.dart';
+import 'package:gradal/providers/auth_repo.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
 import '../widgets/alert-dialog.dart';
@@ -65,12 +66,11 @@ class DashboardScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 tabYes: () async {
-                  await FirebaseAuth.instance
-                      .signOut();
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
+                  await AuthRepo.logOut();
+                  await Future.delayed(Duration(microseconds: 100)).whenComplete(() {
+                    Navigator.pop(context);
+                  });
                   Navigator.pushReplacementNamed(
-                      // ignore: use_build_context_synchronously
                       context, '/welcome_screen');
                 },
               );
