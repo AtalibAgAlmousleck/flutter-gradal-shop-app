@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gradal/widgets/yellow_button.dart';
 
 import '../widgets/auth_widget.dart';
 import '../widgets/snack_bar.dart';
@@ -15,11 +16,12 @@ class SupplierLogin extends StatefulWidget {
 class _SupplierLoginState extends State<SupplierLogin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
-  GlobalKey<ScaffoldMessengerState>();
+      GlobalKey<ScaffoldMessengerState>();
   bool passwordVisibility = false;
   late String email;
   late String password;
   bool processing = false;
+  bool reSendEmail = false;
 
   void login() async {
     setState(() {
@@ -30,8 +32,22 @@ class _SupplierLoginState extends State<SupplierLogin> {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
 
-        //! navigate to customer home screen
-        Navigator.pushReplacementNamed(context, '/supplier_home');
+        await FirebaseAuth.instance.currentUser!.reload();
+        if (FirebaseAuth.instance.currentUser!.emailVerified) {
+          //! navigate to customer home screen
+          await Future.delayed(Duration(microseconds: 100)).whenComplete(() {
+            Navigator.pushReplacementNamed(context, '/supplier_home');
+          });
+        } else {
+          MyMessageHandler.showSnackBar(
+            _scaffoldKey,
+            'Please check your email to verified your email.',
+          );
+          setState(() {
+            processing = false;
+            reSendEmail = true;
+          });
+        }
       } on FirebaseAuthException catch (e) {
         setState(() {
           processing = false;
@@ -85,7 +101,25 @@ class _SupplierLoginState extends State<SupplierLogin> {
                       AuthHeaderLabel(
                         headerLabel: 'Login Supplier',
                       ),
-                      SizedBox(height: 50),
+                      SizedBox(
+                        height: 50,
+                        child: reSendEmail == true
+                            ? YellowButton(
+                                label: 'Resend',
+                                onPressed: () async {
+                                  try {
+                                    await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                                  }catch(e) {print(e);}
+                                  Future.delayed(Duration(seconds: 3)).whenComplete(() {
+                                    setState(() {
+                                      reSendEmail = false;
+                                    });
+                                  });
+                                },
+                                width: 0.6,
+                              )
+                            : SizedBox(),
+                      ),
                       //! started text form for the login form.
                       //! email
                       Padding(
@@ -166,15 +200,15 @@ class _SupplierLoginState extends State<SupplierLogin> {
                       //! button
                       processing
                           ? Center(
-                        child: const CircularProgressIndicator(
-                          color: Colors.purple,
-                        ),
-                      )
+                              child: const CircularProgressIndicator(
+                                color: Colors.purple,
+                              ),
+                            )
                           : AuthButton(
-                        //! registration button
-                        onPressed: login,
-                        textLabel: 'Login',
-                      ),
+                              //! registration button
+                              onPressed: login,
+                              textLabel: 'Login',
+                            ),
                     ],
                   ),
                 ),

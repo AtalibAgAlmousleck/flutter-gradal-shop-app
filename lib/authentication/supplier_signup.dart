@@ -21,7 +21,7 @@ class SupplierSignup extends StatefulWidget {
 class _SupplierSignupState extends State<SupplierSignup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
-  GlobalKey<ScaffoldMessengerState>();
+      GlobalKey<ScaffoldMessengerState>();
   bool passwordVisibility = false;
   late String storeName;
   late String email;
@@ -36,7 +36,7 @@ class _SupplierSignupState extends State<SupplierSignup> {
   dynamic _pickedImageError;
 
   CollectionReference suppliers =
-  FirebaseFirestore.instance.collection('suppliers');
+      FirebaseFirestore.instance.collection('suppliers');
 
   //! image with camera
   void _pickImageCamera() async {
@@ -88,6 +88,13 @@ class _SupplierSignupState extends State<SupplierSignup> {
           await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password);
 
+          try {
+            //send email verification to the user
+            await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+          } catch (e) {
+            print(e);
+          }
+
           //! uploaded info
           firebase_storage.Reference ref = firebase_storage
               .FirebaseStorage.instance
@@ -98,13 +105,16 @@ class _SupplierSignupState extends State<SupplierSignup> {
           _uid = FirebaseAuth.instance.currentUser!.uid;
 
           await ref.getDownloadURL();
+
+          await FirebaseAuth.instance.currentUser!.updateDisplayName(storeName);
+          await FirebaseAuth.instance.currentUser!.updatePhotoURL(storeLogo);
+
           await suppliers.doc(_uid).set({
             'storename': storeName,
             'email': email,
             'storelogo': storeLogo, //storeLogo,
             'phone': '',
             'coverimage': '',
-            //'address': '',
             'sid': _uid,
           });
 
@@ -182,8 +192,8 @@ class _SupplierSignupState extends State<SupplierSignup> {
                               backgroundImage: _imageFile == null
                                   ? null
                                   : FileImage(
-                                File(_imageFile!.path),
-                              ),
+                                      File(_imageFile!.path),
+                                    ),
                             ),
                           ),
                           Column(
@@ -322,14 +332,14 @@ class _SupplierSignupState extends State<SupplierSignup> {
                       //! button
                       processing == true
                           ? const CircularProgressIndicator(
-                        color: Colors.purple,
-                      )
+                              color: Colors.purple,
+                            )
                           : AuthButton(
-                        textLabel: 'Sing Up',
-                        onPressed: () {
-                          signUp();
-                        },
-                      ),
+                              textLabel: 'Sing Up',
+                              onPressed: () {
+                                signUp();
+                              },
+                            ),
                     ],
                   ),
                 ),
