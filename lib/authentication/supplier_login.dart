@@ -6,7 +6,7 @@ import 'package:gradal/widgets/yellow_button.dart';
 
 import '../widgets/auth_widget.dart';
 import '../widgets/snack_bar.dart';
-import 'forgot_password.dart';
+import '../password/forgot_password.dart';
 
 class SupplierLogin extends StatefulWidget {
   const SupplierLogin({Key? key}) : super(key: key);

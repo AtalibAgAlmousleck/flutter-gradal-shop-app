@@ -8,6 +8,7 @@ import 'package:gradal/customer_screens/address_list.dart';
 import 'package:gradal/customer_screens/customer_order.dart';
 import 'package:gradal/customer_screens/wish_list.dart';
 import 'package:gradal/main_screens/cart.dart';
+import 'package:gradal/password/update_password.dart';
 import 'package:gradal/widgets/app_bar_widgets.dart';
 
 import '../customer_screens/add_address.dart';
@@ -307,7 +308,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     RepeatedListTitle(
                                       title: 'Change Password',
                                       icon: Icons.lock,
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                UpdatePassword(),
+                                          ),
+                                        );
+                                      },
                                     ),
                                     YellowDivider(),
                                     RepeatedListTitle(
