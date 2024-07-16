@@ -6,6 +6,7 @@ import 'package:gradal/widgets/yellow_button.dart';
 
 import '../widgets/auth_widget.dart';
 import '../widgets/snack_bar.dart';
+import 'forgot_password.dart';
 
 class SupplierLogin extends StatefulWidget {
   const SupplierLogin({Key? key}) : super(key: key);
@@ -166,7 +167,12 @@ class _SupplierLoginState extends State<SupplierLogin> {
                       //! forget password:
                       TextButton(
                         onPressed: () {
-                          // Implement logic for forgotten password
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ForgotPassword(),
+                            ),
+                          );
                         },
                         child: Text(
                           'Forget password ?',
