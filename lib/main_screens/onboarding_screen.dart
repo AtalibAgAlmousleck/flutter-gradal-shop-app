@@ -1,11 +1,16 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gradal/galleries/shoes_gallery.dart';
-import 'package:gradal/minor_screens/hot_deals.dart';
 import 'package:gradal/minor_screens/sub_category_product.dart';
+import 'package:provider/provider.dart';
+
+import '../galleries/shoes_gallery.dart';
+import '../minor_screens/hot_deals.dart';
+import '../providers/id_provider.dart';
 
 enum Offer {
   watches,
@@ -13,33 +18,70 @@ enum Offer {
   sale,
 }
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+class Onboardingscreen extends StatefulWidget {
+  const Onboardingscreen({Key? key}) : super(key: key);
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<Onboardingscreen> createState() => _OnboardingscreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
-  Timer? countDownTimer;
-  int seconds = 5;
+class _OnboardingscreenState extends State<Onboardingscreen>
+    with SingleTickerProviderStateMixin {
+  Timer? countDowntimer;
+  int seconds = 3;
   List<int> discountList = [];
   int? maxDiscount;
+  late int selectedIndex;
+  late String offerName;
+  late String assetName;
+  late Offer offer;
+  late AnimationController _animationController;
+  late Animation<Color?> _colorTweenAnimation;
 
   @override
   void initState() {
+    selectRandomOffer();
     startTimer();
     getDiscount();
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
+
+    _colorTweenAnimation = ColorTween(begin: Colors.black, end: Colors.red)
+        .animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
+    _animationController.repeat();
+    context.read<IdProvider>().getDocId();
+
     super.initState();
   }
 
   @override
   void dispose() {
+    _animationController.dispose();
     super.dispose();
   }
 
+  void selectRandomOffer() {
+    // [1= watches , 2= shoes , 3=sale]
+
+    for (var i = 0; i < Offer.values.length; i++) {
+      var random = Random();
+      setState(() {
+        selectedIndex = random.nextInt(3);
+        offerName = Offer.values[selectedIndex].toString();
+        assetName = offerName.replaceAll("Offer.", "");
+        offer = Offer.values[selectedIndex];
+      });
+    }
+    print(selectedIndex);
+    print(offerName);
+    print(assetName);
+  }
+
   void startTimer() {
-    countDownTimer = Timer.periodic(Duration(seconds: 1), (time) {
+    countDowntimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         seconds--;
       });
@@ -47,16 +89,55 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         stopTimer();
         Navigator.pushReplacementNamed(context, '/customer_home');
       }
+      //   print(timer.tick);
+      //   print(seconds);
     });
   }
 
   void stopTimer() {
-    countDownTimer!.cancel();
+    countDowntimer!.cancel();
+  }
+
+  Widget buildAsset() {
+    return Image.asset('images/onboard/$assetName.JPEG');
+  }
+
+  void navigateToOffer() {
+    switch (offer) {
+      case Offer.watches:
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => const SubCategoryProduct(
+                    fromOnBoarding: true,
+                    subcategoryName: 'smart watch',
+                    mainCategoryName: 'electronics',)),
+                (Route route) => false);
+        break;
+      case Offer.shoes:
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => const ShoesGalleryScreen(
+                  fromOnBoarding: true,
+                )),
+                (Route route) => false);
+        break;
+      case Offer.sale:
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => HotDealsScreen(
+                  fromOnBoarding: true,
+                  maxDiscount: maxDiscount!.toString(),
+                )),
+                (Route route) => false);
+        break;
+    }
   }
 
   void getDiscount() {
-    FirebaseFirestore.instance.collection('products').get()
-        .then((QuerySnapshot querySnapshot){
+    FirebaseFirestore.instance
+        .collection('products')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
       for (var doc in querySnapshot.docs) {
         discountList.add(doc['discount']);
       }
@@ -70,47 +151,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          SizedBox.expand(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(0),
-              child: GestureDetector(
-                onTap: () {
-                  stopTimer();
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HotDeals(
-                        fromOnBoarding: true,
-                        maxDiscount: maxDiscount!.toString(),
-                      ),
-                    ), (Route route) => false,
-                  );
-                  // Navigator.pushAndRemoveUntil(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => ShoesGalleryScreen(
-                  //       fromOnBoarding: true,
-                  //     ),
-                  //   ), (Route route) => false,
-                  // );
-                  // Navigator.pushAndRemoveUntil(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => SubCategoryProduct(
-                  //       fromOnBoarding: true,
-                  //       subcategoryName: 'girls top',
-                  //       mainCategoryName: 'kids',
-                  //     ),
-                  //   ), (Route route) => false,
-                  // );
-                },
-                child: Image.asset(
-                  'images/onboard/sale.JPEG',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
+          GestureDetector(
+              onTap: () {
+                stopTimer();
+                navigateToOffer();
+              },
+              child: buildAsset()),
           Positioned(
             top: 60,
             right: 30,
@@ -118,18 +164,52 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               height: 35,
               width: 100,
               decoration: BoxDecoration(
-                color: Colors.grey.shade600.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(15),
-              ),
+                  color: Colors.grey.shade600.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(25)),
               child: MaterialButton(
                 onPressed: () {
                   stopTimer();
                   Navigator.pushReplacementNamed(context, '/customer_home');
                 },
-                child: seconds < 1 ? Text('Skip') : Text('Skip $seconds'),
+                child:
+                seconds < 1 ? const Text('Skip') : Text('Skip | $seconds'),
               ),
             ),
           ),
+          offer == Offer.sale
+              ? Positioned(
+              top: 180,
+              right: 74,
+              child: AnimatedOpacity(
+                duration: const Duration(microseconds: 100),
+                opacity: _animationController.value,
+                child: Text(
+                  maxDiscount.toString() + ('%'),
+                  style: const TextStyle(
+                      fontSize: 100,
+                      color: Colors.amber,
+                      fontFamily: 'AkayaTelivigala'),
+                ),
+              ))
+              : const SizedBox(),
+          Positioned(
+              bottom: 70,
+              child: AnimatedBuilder(
+                  animation: _animationController.view,
+                  builder: (context, child) {
+                    return Container(
+                      height: 70,
+                      width: MediaQuery.of(context).size.width,
+                      color: _colorTweenAnimation.value,
+                      child: child,
+                    );
+                  },
+                  child: const Center(
+                    child: Text(
+                      'SHOP NOW',
+                      style: TextStyle(color: Colors.white, fontSize: 24),
+                    ),
+                  )))
         ],
       ),
     );
