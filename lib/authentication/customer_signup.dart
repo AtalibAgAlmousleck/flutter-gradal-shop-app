@@ -101,7 +101,6 @@ class _CustomerRegisterState extends State<CustomerRegister> {
             'address': '',
             'cid': _uid,
           });
-
           _formKey.currentState!.reset();
           setState(() {
             _imageFile = null;

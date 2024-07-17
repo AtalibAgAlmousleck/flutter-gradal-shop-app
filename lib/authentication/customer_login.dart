@@ -1,5 +1,11 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/auth_widget.dart';
 import '../widgets/snack_bar.dart';
@@ -12,13 +18,61 @@ class CustomerLogin extends StatefulWidget {
 }
 
 class _CustomerLoginState extends State<CustomerLogin> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
-      GlobalKey<ScaffoldMessengerState>();
+  CollectionReference customers =
+      FirebaseFirestore.instance.collection('customers');
+
+  Future<bool> checkIfDocExists(String docId) async {
+    try {
+      var doc = await customers.doc(docId).get();
+      return doc.exists;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  bool dockExists = false;
+
+  // setUserId(User user) {
+  //   context.read<IdProvider>().setCustomerId(user);
+  // }
+
+  // google sign in
+  Future<UserCredential> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+    return await FirebaseAuth.instance
+        .signInWithCredential(credential)
+        .whenComplete(() async {
+      User user = FirebaseAuth.instance.currentUser!;
+      dockExists = await checkIfDocExists(user.uid);
+
+      dockExists == false ?
+      await customers.doc(user.uid).set({
+        'name': user.displayName,
+        'email': user.email,
+        'profileimage': user.photoURL,
+        'phone': '',
+        'address': '',
+        'cid': user.uid,
+      }).then(
+          (value) => navigate()) : navigate();
+    });
+  }
+
+  void navigate() {
+    Navigator.pushReplacementNamed(context, '/customer_home');
+  }
   bool passwordVisibility = false;
   late String email;
   late String password;
   bool processing = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
+      GlobalKey<ScaffoldMessengerState>();
 
   void login() async {
     setState(() {
@@ -31,8 +85,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
         _formKey.currentState!.reset();
         //! navigate to customer home screen
         await Future.delayed(Duration(microseconds: 100)).whenComplete(
-            () => Navigator.pushReplacementNamed(context, '/customer_home')
-        );
+            () => Navigator.pushReplacementNamed(context, '/customer_home'));
       } on FirebaseAuthException catch (e) {
         setState(() {
           processing = false;
@@ -175,12 +228,71 @@ class _CustomerLoginState extends State<CustomerLogin> {
                               onPressed: login,
                               textLabel: 'Login',
                             ),
+                      divider(),
+                      googleLogInButton(),
                     ],
                   ),
                 ),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget divider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          SizedBox(
+            width: 80,
+            child: Divider(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+          ),
+          Text(
+            '  Or  ',
+            style: TextStyle(color: Colors.grey),
+          ),
+          SizedBox(
+            width: 80,
+            child: Divider(
+              color: Colors.grey,
+              thickness: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget googleLogInButton() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(50, 50, 50, 20),
+      child: Material(
+        elevation: 3,
+        color: Colors.grey.shade300,
+        borderRadius: BorderRadius.circular(15),
+        child: MaterialButton(
+          onPressed: () {
+            signInWithGoogle();
+          },
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: const [
+                Icon(
+                  FontAwesomeIcons.google,
+                  color: Colors.red,
+                ),
+                Text(
+                  'Sign In With Google',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                )
+              ]),
         ),
       ),
     );

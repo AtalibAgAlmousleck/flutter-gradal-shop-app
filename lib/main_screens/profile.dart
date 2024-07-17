@@ -15,22 +15,35 @@ import '../customer_screens/add_address.dart';
 import '../widgets/alert-dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key, required this.documentId});
+  const ProfileScreen({super.key});
 
-  final String documentId;
+  //final String documentId;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late String documentId;
   CollectionReference customers =
       FirebaseFirestore.instance.collection('customers');
 
   @override
+  void initState() {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if(user != null) {
+        setState(() {
+          documentId = user.uid;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-      future: customers.doc(widget.documentId).get(),
+      future: customers.doc(documentId).get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
