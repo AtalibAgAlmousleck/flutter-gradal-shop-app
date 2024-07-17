@@ -10,9 +10,12 @@ class SubCategoryProduct extends StatefulWidget {
     super.key,
     required this.subcategoryName,
     required this.mainCategoryName,
+    this.fromOnBoarding = false,
   });
+
   final String subcategoryName;
   final String mainCategoryName;
+  final bool fromOnBoarding;
 
   @override
   State<SubCategoryProduct> createState() => _SubCategoryProductState();
@@ -21,8 +24,8 @@ class SubCategoryProduct extends StatefulWidget {
 class _SubCategoryProductState extends State<SubCategoryProduct> {
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> productsStream = FirebaseFirestore
-        .instance.collection('products')
+    final Stream<QuerySnapshot> productsStream = FirebaseFirestore.instance
+        .collection('products')
         .where('maincateg', isEqualTo: widget.mainCategoryName)
         .where('subcateg', isEqualTo: widget.subcategoryName)
         .snapshots();
@@ -30,7 +33,17 @@ class _SubCategoryProductState extends State<SubCategoryProduct> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.grey.shade200,
-        leading: AppBarBackButton(),
+        leading: widget.fromOnBoarding == true
+            ? IconButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/customer_home');
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.black,
+                ),
+              )
+            : AppBarBackButton(),
         title: AppBarTitle(title: widget.subcategoryName),
         centerTitle: true,
         //centerTitle: true,
@@ -44,17 +57,18 @@ class _SubCategoryProductState extends State<SubCategoryProduct> {
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(
-              ),
+              child: CircularProgressIndicator(),
             );
           }
           if (snapshot.data!.docs.isEmpty) {
             return Center(
-              child: Text('This category has no items yet!',
+              child: Text(
+                'This category has no items yet!',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
-                ),),
+                ),
+              ),
             );
           }
           return SingleChildScrollView(
@@ -67,7 +81,7 @@ class _SubCategoryProductState extends State<SubCategoryProduct> {
                 return StaggeredGridTile.fit(
                   crossAxisCellCount: 1,
                   child: ProductModel(
-                   // doc: doc,
+                    // doc: doc,
                     products: snapshot.data!.docs[index],
                   ),
                 );

@@ -4,6 +4,7 @@ import 'package:gradal/authentication/customer_signup.dart';
 import 'package:gradal/authentication/supplier_login.dart';
 import 'package:gradal/authentication/supplier_signup.dart';
 import 'package:gradal/main_screens/customer_home_screen.dart';
+import 'package:gradal/main_screens/onboarding_screen.dart';
 import 'package:gradal/main_screens/supplier_home.dart';
 import 'package:gradal/main_screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,9 +41,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //home: WelcomeScreen(),
-      initialRoute: '/welcome_screen',
+      initialRoute: '/onboarding_screen',
       routes: {
         '/welcome_screen': (content) => WelcomeScreen(),
+        '/onboarding_screen': (context) => const OnboardingScreen(),
         '/customer_home': (context) => CustomerHomeScreen(),
         '/supplier_home': (context) => SupplierHomeScreen(),
         '/customer_signup': (context) => CustomerRegister(),
