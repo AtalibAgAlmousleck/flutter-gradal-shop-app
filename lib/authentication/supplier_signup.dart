@@ -154,7 +154,7 @@ class _SupplierSignupState extends State<SupplierSignup> {
                   child: Column(
                     children: [
                       AuthHeaderLabel(
-                        headerLabel: 'SignUp Supplier',
+                        headerLabel: 'Supplier',
                       ),
                       Row(
                         children: [
